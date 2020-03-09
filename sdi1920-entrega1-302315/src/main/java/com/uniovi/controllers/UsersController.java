@@ -38,5 +38,25 @@ public class UsersController {
 	public String login(Model model) {
 		return "login";
 	}
+	
+	@RequestMapping(value = "/home", method = RequestMethod.GET)
+	public String home(Model model) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String email = auth.getName();
+		User activeUser = usersService.getUserByEmail(email);
+		return "home";
+	}
+	
+	@RequestMapping("/user/list")
+	public String getListado(Model model, @RequestParam(value="", required=false)String searchText) {
+		
+		if(searchText != null && !searchText.isEmpty()) {
+			model.addAttribute("usersList", usersService.searchUsersByNameAndSurname(searchText));
+		} else {
+			model.addAttribute("usersList", usersService.getUsers());
+		}		
+		
+		return "user/list";
+	}
 
 }
