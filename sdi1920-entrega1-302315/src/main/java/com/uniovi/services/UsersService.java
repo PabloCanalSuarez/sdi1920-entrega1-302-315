@@ -6,6 +6,10 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +23,9 @@ public class UsersService {
 
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
+	@Autowired
+	private RolesService roleService;
 
 	@PostConstruct
 	public void init() {
@@ -52,6 +59,16 @@ public class UsersService {
 		searchText = "%"+searchText+"%";
 		userList = usersRepository.searchByNameAndSurname(searchText);
 		return userList;
+	}
+
+	public Page<User> getNotAdminUsersWithoutLoggedUser(Pageable pageable) {
+		Page<User> users = new PageImpl<User>(new ArrayList<User>());
+		
+		String role = roleService.getRoles()[0];
+		String emailOfUserToSkip = SecurityContextHolder.getContext().getAuthentication().getName();
+		users = usersRepository.searchByRoleAndDontIncludeSpecificUser(pageable, role, emailOfUserToSkip);
+		
+		return users;
 	}
 	
 }
