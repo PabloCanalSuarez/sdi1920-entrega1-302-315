@@ -59,4 +59,21 @@ public class UsersController {
 		return "user/list";
 	}
 
+	@RequestMapping(value = "/signup", method = RequestMethod.GET)
+	public String signup(Model model) {
+		model.addAttribute("user", new User());
+		return "signup";
+	}
+	
+	@RequestMapping(value = "/signup", method = RequestMethod.POST)
+	public String signup(@Validated User user, BindingResult result) {
+		signUpFormValidator.validate(user, result);
+		if (result.hasErrors())
+			return "signup";
+		
+		user.setRole(rolesService.getRoles()[0]);
+		usersService.addUser(user);
+		securityService.autoLogin(user.getEmail(), user.getPasswordConfirm());
+		return "redirect:home";
+	}
 }
