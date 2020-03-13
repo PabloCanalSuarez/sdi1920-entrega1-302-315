@@ -48,18 +48,19 @@ public class UsersController {
 	}
 	
 	@RequestMapping("/user/list")
-	public String getListado(Model model, Pageable pageable,@RequestParam(value="", required=false)String searchText) {
-		Page<User> users = usersService.getNotAdminUsersWithoutLoggedUser(pageable);
+	public String getListado(Model model, Pageable pageable, @RequestParam(value="", required=false)String searchText) {
+		Page<User> users = null;
 		
-		/*
 		if(searchText != null && !searchText.isEmpty()) {
-			model.addAttribute("usersList", usersService.searchUsersByNameAndSurname(searchText));
+			users = usersService.searchUsersByNameSurnameAndMail(pageable, searchText.toLowerCase());
 		} else {
-			model.addAttribute("usersList", usersService.getNotAdminUsersWithoutLoggedUser(pageable));
-		}*/
+			if (searchText == null) searchText = "";
+			users = usersService.getNotAdminUsersWithoutLoggedUser(pageable);
+		}
 		 
 		model.addAttribute("usersList", users.getContent());
 		model.addAttribute("page", users);
+		model.addAttribute("searchText", searchText);
 		return "user/list";
 	}
 
