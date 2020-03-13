@@ -5,8 +5,8 @@
 	<!-- Barra de Navegación superior -->
 	<nav th:replace="fragments/nav" />
 	<div class="container">
-		<h2 th:text="#{usuarios.message}"></h2>
-		<p th:text="#{usuariosSub.message}"></p>
+		<h2 th:text="#{user.message}"></h2>
+		<p th:text="#{userSub.message}"></p>
 
 		<form class="navbar-form" action="/user/list">
 			<div class="form-group">
@@ -20,9 +20,9 @@
 			<table class="table table-hover">
 				<thead>
 					<tr>
-						<th>Email</th>
-						<th th:text="#{usuarioName.message}">Nombre</th>
-						<th th:text="#{usuarioApellidos.message}">Apellidos</th>
+						<th th:text="#{userEmail.message}">Email</th>
+						<th th:text="#{userName.message}">Nombre</th>
+						<th th:text="#{userSurname.message}">Apellidos</th>
 					</tr>
 				</thead>
 				<tbody>

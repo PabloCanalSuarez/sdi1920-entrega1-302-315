@@ -11,7 +11,7 @@
 				<label class="control-label col-sm-2" for="email">Email:</label>
 				<div class="col-sm-10">
 					<input type="text" class="form-control" name="email"
-						th:placeholder="#{emailPH.message}" required="true" /> 
+						th:placeholder="#{signup.emailPH.message}" required="true" /> 
 					<span class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
 				</div>
 			</div>
@@ -19,7 +19,7 @@
 				<label class="control-label col-sm-2" for="name" th:text="#{signupName.message}">Nombre:</label>
 				<div class="col-sm-10">
 					<input type="text" class="form-control" name="name"
-						th:placeholder="#{namePH.message}" required="true" />
+						th:placeholder="#{signup.namePH.message}" required="true" />
 					<span class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
 				</div>
 			</div>
@@ -27,7 +27,7 @@
 				<label class="control-label col-sm-2" for="lastName" th:text="#{signupSurname.message}">Apellidos:</label>
 				<div class="col-sm-10">
 					<input type="text" class="form-control" name="lastName"
-						th:placeholder="#{surnamePH.message}" required="true" />
+						th:placeholder="#{signup.surnamePH.message}" required="true" />
 					<span class="text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>
 				</div>
 			</div>
@@ -35,7 +35,7 @@
 				<label class="control-label col-sm-2" for="password" th:text="#{signupPassword.message}">Password:</label>
 				<div class="col-sm-10">
 					<input type="password" class="form-control" name="password"
-						th:placeholder="#{passwordPH.message}" />
+						th:placeholder="#{signup.passwordPH.message}" />
 					<span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
 				</div>
 			</div>
@@ -44,7 +44,7 @@
 					el Password:</label>
 				<div class="col-sm-10">
 					<input type="password" class="form-control" name="passwordConfirm"
-						th:placeholder="#{passwordPH.message}" />
+						th:placeholder="#{signup.passwordPH.message}" />
 					<span class="text-danger" th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}"></span>
 				</div>
 			</div>

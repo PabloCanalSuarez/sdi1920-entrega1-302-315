@@ -39,5 +39,9 @@ public class InsertDataSampleService {
 
 		
 		usersService.addUser(user1);
+		usersService.addUser(user2);
+		usersService.addUser(user3);
+		usersService.addUser(user4);
+		usersService.addUser(user5);
 	}
 }
