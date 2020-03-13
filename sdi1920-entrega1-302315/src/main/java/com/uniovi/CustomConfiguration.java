@@ -44,7 +44,6 @@ public class CustomConfiguration implements WebMvcConfigurer {
 		Properties prop = new Properties();
 		try {
 			FileInputStream file = new FileInputStream("src/main/resources/config.properties");
-			
 			prop.load(file);
 		
 			int page = Integer.parseInt(prop.getProperty("spring.data.web.pageable.page-parameter"));
@@ -54,9 +53,9 @@ public class CustomConfiguration implements WebMvcConfigurer {
 			argumentResolvers.add(resolver);
 			
 		} catch (FileNotFoundException e) {
-			System.out.println("### ERROR: config.properties not found ###");
+			System.err.println("### ERROR: config.properties not found ###");
 		} catch (IOException e) {
-			System.out.println("### ERROR: failed trying to load config.properties ###");
+			System.err.println("### ERROR: failed trying to load config.properties ###");
 		}
 	}
 }
