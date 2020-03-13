@@ -17,7 +17,7 @@ public class InsertDataSampleService {
 
 	@PostConstruct
 	public void init() {
-		User user1 = new User("Pablo", "Cañal", "admin@email.com");
+		User user1 = new User("Admin", "Admin", "admin@email.com");
 		user1.setPassword("123456");
 		user1.setRole(rolesService.getRoles()[1]);
 		

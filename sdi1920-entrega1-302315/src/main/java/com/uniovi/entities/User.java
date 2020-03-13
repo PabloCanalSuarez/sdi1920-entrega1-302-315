@@ -1,9 +1,13 @@
 package com.uniovi.entities;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 @Entity
@@ -22,6 +26,11 @@ public class User {
 	
 	@Transient // no se almacena en la tabla
 	private String passwordConfirm;
+	
+	@OneToMany(mappedBy="userFrom")
+	private Set<Friendship> friendshipInvitations = new HashSet<Friendship>();
+	@OneToMany(mappedBy="userTo")
+	private Set<Friendship> friendshipRequests = new HashSet<Friendship>();
 
 	public User(String name, String lastName, String email) {
 		super();
@@ -92,4 +101,22 @@ public class User {
 	public void setRole(String role) {
 		this.role = role;
 	}
+
+	public Set<Friendship> getFriendshipInvitations() {
+		return new HashSet<Friendship>(friendshipInvitations);
+	}
+
+	public void setFriendshipInvitations(Set<Friendship> friendshipInvitations) {
+		this.friendshipInvitations = friendshipInvitations;
+	}
+
+	public Set<Friendship> getFriendshipRequests() {
+		return new HashSet<Friendship>(friendshipRequests);
+	}
+
+	public void setFriendshipRequests(Set<Friendship> friendshipRequests) {
+		this.friendshipRequests = friendshipRequests;
+	}
+	
+	
 }
