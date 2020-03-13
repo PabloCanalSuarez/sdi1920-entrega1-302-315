@@ -1,6 +1,7 @@
 package com.uniovi.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -47,14 +48,18 @@ public class UsersController {
 	}
 	
 	@RequestMapping("/user/list")
-	public String getListado(Model model, Pageable pageable, @RequestParam(value="", required=false)String searchText) {
+	public String getListado(Model model, Pageable pageable,@RequestParam(value="", required=false)String searchText) {
+		Page<User> users = usersService.getNotAdminUsersWithoutLoggedUser(pageable);
+		
 		/*
 		if(searchText != null && !searchText.isEmpty()) {
 			model.addAttribute("usersList", usersService.searchUsersByNameAndSurname(searchText));
 		} else {
 			model.addAttribute("usersList", usersService.getNotAdminUsersWithoutLoggedUser(pageable));
-		}*/		
-		
+		}*/
+		 
+		model.addAttribute("usersList", users.getContent());
+		model.addAttribute("page", users);
 		return "user/list";
 	}
 
