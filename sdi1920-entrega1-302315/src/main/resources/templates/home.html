@@ -11,7 +11,7 @@
 			<span sec:authentication="principal.username"
 				th:inline="text"> [[${#httpServletRequest.remoteUser}]] </span>
 		</p>
-
-		<footer th:replace="fragments/footer" />
+	</div>
+	<footer th:replace="fragments/footer" />
 </body>
 </html>

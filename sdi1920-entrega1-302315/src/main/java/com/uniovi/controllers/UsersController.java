@@ -1,14 +1,14 @@
 package com.uniovi.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,11 +33,15 @@ public class UsersController {
 	@Autowired
 	private RolesService rolesService;
 
-	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login(Model model) {
-		return "login";
-	}
+    public String login(Model model, String error, String logout) {
+        if (error != null)
+            model.addAttribute("error", "Your email or password is invalid.");
+        if (logout != null)
+            model.addAttribute("message", "You have been logged out successfully.");
+
+        return "login";
+    }
 	
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public String home(Model model) {
@@ -48,14 +52,18 @@ public class UsersController {
 	}
 	
 	@RequestMapping("/user/list")
-	public String getListado(Model model, @RequestParam(value="", required=false)String searchText) {
+	public String getListado(Model model, Pageable pageable,@RequestParam(value="", required=false)String searchText) {
+		Page<User> users = usersService.getNotAdminUsersWithoutLoggedUser(pageable);
 		
+		/*
 		if(searchText != null && !searchText.isEmpty()) {
 			model.addAttribute("usersList", usersService.searchUsersByNameAndSurname(searchText));
 		} else {
-			model.addAttribute("usersList", usersService.getUsers());
-		}		
-		
+			model.addAttribute("usersList", usersService.getNotAdminUsersWithoutLoggedUser(pageable));
+		}*/
+		 
+		model.addAttribute("usersList", users.getContent());
+		model.addAttribute("page", users);
 		return "user/list";
 	}
 
