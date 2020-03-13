@@ -5,6 +5,7 @@
 				<th th:text="#{userEmail.message}">Email</th>
 				<th th:text="#{userName.message}">Nombre</th>
 				<th th:text="#{userSurname.message}">Apellidos</th>
+				<th class="col-md-1"></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -12,6 +13,8 @@
 				<td th:text="${user.email}">Email</td>
 				<td th:text="${user.name}">Nombre</td>
 				<td th:text="${user.lastName}">Apellidos</td>
+				<td><a sec:authorize="hasRole('ROLE_USER')"
+				th:href="${'/invitation/send/' + user.id}" th:text="#{sendFriendRequestBtn.message}">agregar amigo</a></td>
 			</tr>
 		</tbody>
 	</table>
