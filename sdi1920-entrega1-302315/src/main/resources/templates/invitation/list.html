@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="fragments/head" />
+<body>
+	<!-- Barra de Navegación superior -->
+	<nav th:replace="fragments/nav" />
+	<div class="container">
+		<h2 th:text="#{invitation.message}">Agregar usuario</h2>
+
+		<table class="table table-hover" id="tableInvitations">
+			<thead>
+				<tr>
+					<th th:text="#{invitation.userNameFrom.message}">Amigo</th>
+					<th th:text="#{invitation.userEmailFrom.message}">Amigo</th>
+					<th class="col-md-1"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="invitation : ${invitationList}">
+					<td th:text="${invitation.userFrom.name}">Email</td>
+					<td th:text="${invitation.userFrom.email}">Email</td>
+					<td><a sec:authorize="hasRole('ROLE_USER')"
+						th:href="${'/friends/accept/' + invitation.id}"
+						th:text="#{acceptFriendRequestBtn.message}">Aceptar</a></td>
+				</tr>
+			</tbody>
+		</table>
+		<footer th:replace="fragments/pagination"/>
+	</div>
+	<footer th:replace="fragments/footer" />
+</body>
+</html>
