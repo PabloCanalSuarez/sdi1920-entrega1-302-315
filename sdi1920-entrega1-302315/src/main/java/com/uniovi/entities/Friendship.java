@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.Type;
+
 @Entity	
 public class Friendship {
 
@@ -12,6 +14,7 @@ public class Friendship {
 	@GeneratedValue
 	private long id;
 	
+	@Type(type="true_false")
 	private boolean accepted;
 	
 	@ManyToOne

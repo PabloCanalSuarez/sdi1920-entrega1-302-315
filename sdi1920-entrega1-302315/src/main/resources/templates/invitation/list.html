@@ -20,7 +20,7 @@
 					<td th:text="${invitation.userFrom.name}">Email</td>
 					<td th:text="${invitation.userFrom.email}">Email</td>
 					<td><a sec:authorize="hasRole('ROLE_USER')"
-						th:href="${'/friends/accept/' + invitation.id}"
+						th:href="${'/invitation/accept/' + invitation.id}"
 						th:text="#{acceptFriendRequestBtn.message}">Aceptar</a></td>
 				</tr>
 			</tbody>
