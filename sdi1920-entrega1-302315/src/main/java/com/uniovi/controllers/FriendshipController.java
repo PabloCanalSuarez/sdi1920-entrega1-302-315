@@ -1,7 +1,12 @@
 package com.uniovi.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -66,8 +71,66 @@ public class FriendshipController {
 	@RequestMapping(value = "/invitation/accept/{id}", method = RequestMethod.GET)
 	public String acceptInvitation(Model model, @PathVariable Long id) {
 		friendshipService.acceptInvitation(id);
+		acceptInvitationInOppositeDirection(id);
 		
 		return "redirect:/invitation/list"; // change this when feature of /friend/list/ is done.
+	}
+	
+	/*
+	 * We create an invitation in the opposite direction and accept it
+	 */
+	private void acceptInvitationInOppositeDirection(Long id) {
+		Friendship f = friendshipService.getFriendship(id);
+		User from = f.getUserTo();
+		User to = f.getUserFrom();
+		
+		Friendship invitation = friendshipService.searchFriendshipByTwoUsers(from.getId(), to.getId());
+		if(invitation != null) {
+			friendshipService.acceptInvitation(invitation.getId());
+			return;
+		}
+		
+		Friendship friendInvitation = new Friendship(true);
+		friendInvitation.setUserFrom(from);
+		friendInvitation.setUserTo(to);
+		
+		friendshipService.addFriendship(friendInvitation);
+	}
+
+	@RequestMapping("/user/friends")
+	public String friendList(Model model, Pageable pageable) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String email = auth.getName();
+		User userFrom = userService.getUserByEmail(email);
+		/*
+		// Search
+		Page<Friendship> in = friendshipService.searchFriendshipReceivedByUser(pageable, userFrom.getId());
+		Page<Friendship> out = friendshipService.searchFriendshipSendByUser(pageable, userFrom.getId());
+		
+		List<User> inUsr= in.getContent()
+								.stream()
+								.filter( f -> f.isAccepted() )
+								.map( f -> f.getUserFrom() )
+								.collect(Collectors.toList());
+		
+		List<User> outUsr= out.getContent()
+								.stream()
+								.filter( f -> f.isAccepted() )
+								.map( f -> f.getUserTo() )
+								.collect(Collectors.toList());
+		
+		inUsr.addAll(outUsr);
+		
+		Page<User> users = new PageImpl<User>(new ArrayList<User>( inUsr.stream().distinct().collect(Collectors.toList()) ));
+		*/
+		
+		Page<Friendship> users = friendshipService.searchFriendsOfUser(pageable, userFrom.getId());
+		
+		// Add attrs
+		model.addAttribute("friendsList", users.getContent());
+		model.addAttribute("page", users);
+		
+		return "user/friends";
 	}
 
 }
