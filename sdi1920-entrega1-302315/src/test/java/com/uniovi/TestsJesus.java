@@ -125,7 +125,7 @@ public class TestsJesus {
 		public void Prueba11() {
 			
 			PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
-			PO_LoginView.fillForm(driver, "admin@email.com", "123456");
+			PO_LoginView.fillForm(driver, "admin@email.com", "admin");
 			
 			List<WebElement> elementos = PO_View.checkElement(driver, "id", "users-menu");
 			elementos.get(0).click();
@@ -158,7 +158,7 @@ public class TestsJesus {
 		@Test
 		public void Prueba12() {
 			PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
-			PO_LoginView.fillForm(driver, "admin@email.com", "123456");
+			PO_LoginView.fillForm(driver, "admin@email.com", "admin");
 			
 			List<WebElement> elementos = PO_View.checkElement(driver, "id", "users-menu");
 			elementos.get(0).click();
@@ -194,7 +194,7 @@ public class TestsJesus {
 		@Test
 		public void Prueba13() {
 			PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
-			PO_LoginView.fillForm(driver, "admin@email.com", "123456");
+			PO_LoginView.fillForm(driver, "admin@email.com", "admin");
 			
 			List<WebElement> elementos = PO_View.checkElement(driver, "id", "users-menu");
 			elementos.get(0).click();
@@ -217,7 +217,7 @@ public class TestsJesus {
 		@Test
 		public void Prueba14() {
 			PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
-			PO_LoginView.fillForm(driver, "admin@email.com", "123456");
+			PO_LoginView.fillForm(driver, "admin@email.com", "admin");
 			
 			List<WebElement> elementos = PO_View.checkElement(driver, "id", "users-menu");
 			elementos.get(0).click();
