@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="fragments/head" />
+<body>
+	<nav th:replace="fragments/nav" />
+	
+	<div class="container">
+		<h2 th:text="#{friendsList.message}">Amigos</h2>
+
+		<table class="table table-hover" id="tableFriends">
+			<thead>
+				<tr>
+					<th th:text="#{userEmail.message}">Email</th>
+					<th th:text="#{userName.message}">Nombre</th>
+					<th th:text="#{userSurname.message}">Apellidos</th>
+					<th class="col-md-1"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="friend : ${friendsList}">
+					<td th:text="${friend.userTo.email}">Email</td>
+					<td th:text="${friend.userTo.name}">Name</td>
+					<td th:text="${friend.userTo.lastName}">Surname</td>
+				</tr>
+			</tbody>
+		</table>
+		<footer th:replace="fragments/pagination"/>
+	</div>
+	
+	<footer th:replace="fragments/footer" />
+</body>
+</html>
