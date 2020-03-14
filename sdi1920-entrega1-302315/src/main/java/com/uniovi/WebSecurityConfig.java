@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 
 @Configuration
@@ -30,6 +31,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 				.antMatchers("/css/**", "/img/**", "/script/**", "/", "/signup", "/login/**").permitAll()
 				.antMatchers("/user/**").authenticated()
+				.antMatchers("/secret").hasAnyAuthority("ROLE_ADMIN")
 				.anyRequest().authenticated()
 					.and()
 				.formLogin() 
@@ -38,8 +40,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.defaultSuccessUrl("/home") 
 					.failureForwardUrl("/login")
 					.and()
-				.logout() 
-					.permitAll();
+				.logout().permitAll()
+					.and()
+				.exceptionHandling()
+					.accessDeniedPage("/accessDenied.html")
+					.accessDeniedHandler(accessDeniedHandler())
+					;
 	}
 
 	@Autowired
@@ -56,5 +62,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	public SpringSecurityDialect securityDialect() {
 		return new SpringSecurityDialect();
+	}
+	
+	@Bean
+	public AccessDeniedHandler accessDeniedHandler(){
+	    return new CustomAccessDeniedHandler();
 	}
 }

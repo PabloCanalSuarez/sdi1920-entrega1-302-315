@@ -25,6 +25,7 @@ import com.uniovi.tests.pageobjects.PO_Properties;
 import com.uniovi.tests.pageobjects.PO_RegisterView;
 import com.uniovi.tests.pageobjects.PO_View;
 import com.uniovi.tests.util.DataBaseAccess;
+import com.uniovi.tests.util.SeleniumUtils;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestsJesus {
@@ -259,5 +260,29 @@ public class TestsJesus {
 			usersCount = results.size();
 
 			Assertions.assertEquals(1, usersCount);
+		}
+		
+		
+		
+		@Test
+		public void Prueba21() {
+			driver.navigate().to(URL + "/user/list");
+			
+			// Check we are at login view
+			PO_View.checkElement(driver, "id", "loginForm");
+		}
+		
+		@Test
+		public void Prueba22() {
+			fail("Not yet implemented");
+		}
+		
+		@Test
+		public void Prueba23() {
+			driver.navigate().to(URL + "/secret");
+			
+			// We are at login view
+			PO_LoginView.fillForm(driver, "jesus@email.com", "123456");
+			PO_View.checkElement(driver, "text", "HTTP Status 403 – Forbidden");
 		}
 }
