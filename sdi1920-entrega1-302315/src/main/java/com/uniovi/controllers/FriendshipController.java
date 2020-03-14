@@ -30,14 +30,22 @@ public class FriendshipController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String email = auth.getName();
 		User userFrom = userService.getUserByEmail(email);
+		Long userFromId = userFrom.getId();
+		
+		// Check invitation not repeated
+		Friendship invitation = friendshipService.searchFriendshipByTwoUsers(userFromId, id);
+		if(invitation != null) {
+			model.addAttribute("message", "La petición de amistad para " + userService.getUser(id).getFullName() + " ya fue enviada.");
+			return "redirect:/user/list";
+		}
 		
 		Friendship friendInvitation = new Friendship(false);
-		friendInvitation.setUserFrom(userService.getUser(userFrom.getId()));
+		friendInvitation.setUserFrom(userService.getUser(userFromId));
 		friendInvitation.setUserTo(userService.getUser(id));
 		
 		friendshipService.addFriendship(friendInvitation);
 		
-        return "redirect:/invitation/list";
+        return "redirect:/user/list";
     }
 	
 	// lista las solicitudes de amistad realizadas al usuario

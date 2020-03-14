@@ -10,7 +10,7 @@ import com.uniovi.entities.Friendship;
 public interface FriendshipRepository extends CrudRepository<Friendship, Long>{
 
 	@Query("SELECT f FROM Friendship f WHERE f.userFrom.id = ?1 AND f.userTo.id = ?2")
-	Page<Friendship> searchFriendshipByTwoUsers(Pageable pageable, Long userFromId, Long userToId);
+	Friendship searchFriendshipByTwoUsers(Long userFromId, Long userToId);
 
 	@Query("SELECT f FROM Friendship f WHERE f.userFrom.id = ?1")
 	Page<Friendship> searchFriendshipSendByUser(Pageable pageable, Long userFromId);

@@ -1,5 +1,7 @@
 package com.uniovi;
 
+import java.util.List;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -8,6 +10,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -112,7 +115,7 @@ public class TestsPablo {
 	// a la página de inicio de sesión (Login).
 	@Test
 	public void Prueba9() {
-		// Vamos al formulario de registro
+		// Vamos al formulario de login
 		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
 		PO_LoginView.fillForm(driver, "admin@email.com", "admin");
 		PO_NavView.clickOption(driver, "logout", "class", "btn btn-primary");
@@ -127,5 +130,52 @@ public class TestsPablo {
 	public void Prueba10() {
 		SeleniumUtils.textoNoPresentePagina(driver, "Desconectar");
 	}
+
+	// Desde el listado de usuarios de la aplicación, enviar una invitación de amistad a un usuario.
+	// Comprobar que la solicitud de amistad aparece en el listado de invitaciones (punto siguiente).
+	@Test
+	public void Prueba15() {
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		PO_LoginView.fillForm(driver, "diego@email.com", "123456");
+
+		List<WebElement> elementos = PO_HomeView.checkElement(driver, "free", "//td[contains(text(), 'jesus@email.com')]/following-sibling::*/a[contains(@href, 'invitation/send/')]");
+		elementos.get(0).click();
+		
+		PO_NavView.clickOption(driver, "logout", "class", "btn btn-primary");
+		
+		// Comprobamos haber enviado la invitacion
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		PO_LoginView.fillForm(driver, "jesus@email.com", "123456");
+		
+		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href,'invitation/list')]");
+		elementos.get(0).click();
+		
+		PO_View.checkElement(driver, "text", "Tus Invitaciones");
+		PO_View.checkElement(driver, "text", "Diego");
+	}
+
+	// Desde el listado de usuarios de la aplicación, enviar una invitación de amistad a un usuario al
+	// que ya le habíamos enviado la invitación previamente. No debería dejarnos enviar la invitación, se podría
+	// ocultar el botón de enviar invitación o notificar que ya había sido enviada previamente.
+//	@Test
+//	public void Prueba16() {
+//		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+//		PO_LoginView.fillForm(driver, "diego@email.com", "123456");
+//
+//		List<WebElement> elementos = PO_HomeView.checkElement(driver, "free", "//td[contains(text(), 'clara@email.com')]/following-sibling::*/a[contains(@href, 'invitation/send/')]");
+//		elementos.get(0).click();
+//		
+//		PO_View.checkElement(driver, "text", "Tus Invitaciones");
+//		
+//		// Comprobamos haber enviado la invitacion
+//		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+//		PO_LoginView.fillForm(driver, "jesus@email.com", "123456");
+//		
+//		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href,'invitation/list')]");
+//		elementos.get(0).click();
+//		
+//		PO_View.checkElement(driver, "text", "Tus Invitaciones");
+//		PO_View.checkElement(driver, "text", "Diego");
+//	}
 
 }

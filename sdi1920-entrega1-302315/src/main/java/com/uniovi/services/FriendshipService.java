@@ -35,8 +35,8 @@ public class FriendshipService {
 		friendshipRepository.deleteById(id);
 	}
 	
-	public Page<Friendship> searchFriendshipByTwoUsers(Pageable pageable, Long userFromId, Long userToId) {
-		return friendshipRepository.searchFriendshipByTwoUsers(pageable, userFromId, userToId);
+	public Friendship searchFriendshipByTwoUsers(Long userFromId, Long userToId) {
+		return friendshipRepository.searchFriendshipByTwoUsers(userFromId, userToId);
 	}
 	
 	public Page<Friendship> searchFriendshipSendByUser(Pageable pageable, Long userFromId) {
