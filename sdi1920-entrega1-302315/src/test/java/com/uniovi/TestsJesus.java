@@ -1,5 +1,7 @@
 package com.uniovi;
 
+import static org.junit.Assert.fail;
+
 import java.util.List;
 
 import org.junit.After;
@@ -23,7 +25,6 @@ import com.uniovi.tests.pageobjects.PO_Properties;
 import com.uniovi.tests.pageobjects.PO_RegisterView;
 import com.uniovi.tests.pageobjects.PO_View;
 import com.uniovi.tests.util.DataBaseAccess;
-import com.uniovi.tests.util.SeleniumUtils;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestsJesus {
@@ -122,6 +123,7 @@ public class TestsJesus {
 		
 		@Test
 		public void Prueba11() {
+			
 			PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
 			PO_LoginView.fillForm(driver, "admin@email.com", "123456");
 			
@@ -147,8 +149,115 @@ public class TestsJesus {
 				}
 				
 			} while (isNextPage); // nextPageOfList
+
+			int numberUsers = DataBaseAccess.listUsers().stream().filter( u -> u.getRole().equals( "ROLE_USER" ) ).toArray().length;
+			Assertions.assertEquals(numberUsers, usersCount);
+		}
+		
+		
+		@Test
+		public void Prueba12() {
+			PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+			PO_LoginView.fillForm(driver, "admin@email.com", "123456");
 			
-			//DataBaseAccess.listUsers().forEach( u -> u.getEmail());
-			Assertions.assertEquals(5, usersCount);
+			List<WebElement> elementos = PO_View.checkElement(driver, "id", "users-menu");
+			elementos.get(0).click();
+			elementos = PO_View.checkElement(driver, "free", "//a[contains(@href,'user/list')]");
+			elementos.get(0).click();
+			
+			// Click search with no searchText
+			List<WebElement> searchLink = driver.findElements(By.xpath("//*[@id=\"searchForUserForm\"]/button"));
+			searchLink.get(0).click();
+			
+			int usersCount = 0;
+			boolean isNextPage = false;
+			do {
+				
+				List<WebElement> users = driver.findElements(By.xpath("//*[@id=\"tableUsers\"]/tbody/tr"));
+				usersCount += users.size();
+				
+				// Check If There is next page
+				List<WebElement> nextPageLink = driver.findElements(By.xpath("//*[@id=\"nextPageOfList\"]/a"));
+				if ( !nextPageLink.isEmpty() ) {
+					nextPageLink.get(0).click();
+					isNextPage = true;
+				} else {
+					isNextPage = false;
+				}
+				
+			} while (isNextPage); // nextPageOfList
+
+			int numberUsers = DataBaseAccess.listUsers().stream().filter( u -> u.getRole().equals( "ROLE_USER" ) ).toArray().length;
+			Assertions.assertEquals(numberUsers, usersCount);
+		}
+		
+		@Test
+		public void Prueba13() {
+			PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+			PO_LoginView.fillForm(driver, "admin@email.com", "123456");
+			
+			List<WebElement> elementos = PO_View.checkElement(driver, "id", "users-menu");
+			elementos.get(0).click();
+			elementos = PO_View.checkElement(driver, "free", "//a[contains(@href,'user/list')]");
+			elementos.get(0).click();
+			
+			// Enter search text
+			WebElement searchBar = driver.findElement(By.name("searchText"));
+			searchBar.sendKeys("NonExistingUser$$gfgh");
+			
+			List<WebElement> searchLink = driver.findElements(By.xpath("//*[@id=\"searchForUserForm\"]/button"));
+			searchLink.get(0).click();
+			
+			List<WebElement> results = driver.findElements(By.xpath("//*[@id=\"tableUsers\"]/tbody/tr"));
+			int usersCount = results.size();
+
+			Assertions.assertEquals(0, usersCount);
+		}
+		
+		@Test
+		public void Prueba14() {
+			PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+			PO_LoginView.fillForm(driver, "admin@email.com", "123456");
+			
+			List<WebElement> elementos = PO_View.checkElement(driver, "id", "users-menu");
+			elementos.get(0).click();
+			elementos = PO_View.checkElement(driver, "free", "//a[contains(@href,'user/list')]");
+			elementos.get(0).click();
+			
+			// Search By Name
+			WebElement searchBar = driver.findElement(By.name("searchText"));
+			searchBar.sendKeys("Clar");
+			
+			List<WebElement> searchLink = driver.findElements(By.xpath("//*[@id=\"searchForUserForm\"]/button"));
+			searchLink.get(0).click();
+			
+			List<WebElement> results = driver.findElements(By.xpath("//*[@id=\"tableUsers\"]/tbody/tr"));
+			int usersCount = results.size();
+
+			Assertions.assertEquals(1, usersCount);
+			
+			// Search By Surname
+			searchBar = driver.findElement(By.name("searchText"));
+			searchBar.sendKeys("e la Cal");
+			
+			searchLink = driver.findElements(By.xpath("//*[@id=\"searchForUserForm\"]/button"));
+			searchLink.get(0).click();
+			
+			results = driver.findElements(By.xpath("//*[@id=\"tableUsers\"]/tbody/tr"));
+			usersCount = results.size();
+
+			Assertions.assertEquals(1, usersCount);
+			
+			// Search By email
+			searchBar = driver.findElement(By.name("searchText"));
+			searchBar.sendKeys("diego@email.co");
+			
+			searchLink = driver.findElements(By.xpath("//*[@id=\"searchForUserForm\"]/button"));
+			searchLink.get(0).click();
+			
+			results = driver.findElements(By.xpath("//*[@id=\"tableUsers\"]/tbody/tr"));
+			usersCount = results.size();
+
+			Assertions.assertEquals(1, usersCount);
 		}
 }

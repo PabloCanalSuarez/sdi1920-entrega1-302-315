@@ -60,6 +60,15 @@ public class UsersService {
 		userList = usersRepository.searchByNameAndSurname(searchText);
 		return userList;
 	}
+	
+	public Page<User> searchUsersByNameSurnameAndMail(Pageable pageable, String searchText) {
+		Page<User> users = new PageImpl<User>(new ArrayList<User>());
+		
+		searchText = "%"+searchText+"%";
+		users = usersRepository.searchUsersByNameSurnameAndMail(pageable, searchText);
+		
+		return users;
+	}
 
 	public Page<User> getNotAdminUsersWithoutLoggedUser(Pageable pageable) {
 		Page<User> users = new PageImpl<User>(new ArrayList<User>());

@@ -47,7 +47,7 @@ public class DataBaseAccess {
 	}
 	
 	public static List<User> listUsers() {
-		String query = "SELECT * FROM TUSER";
+		String query = "SELECT * FROM User";
 		
 		Connection c = null;
 		Statement st = null;
@@ -63,7 +63,8 @@ public class DataBaseAccess {
 				user.setId( rs.getInt("id") );
 				user.setEmail( rs.getString("email") );
 				user.setName( rs.getString("name") );
-				user.setLastName( rs.getString("lastName") );
+				user.setRole( rs.getString("role") );
+				//user.setLastName( rs.getString("lastName") );
 				users.add(user);
 			}						
 		} catch (SQLException e) {
