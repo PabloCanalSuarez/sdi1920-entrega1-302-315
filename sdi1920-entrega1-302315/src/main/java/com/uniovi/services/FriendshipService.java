@@ -54,4 +54,8 @@ public class FriendshipService {
 	public Page<Friendship> getInvitations(Pageable pageable) {
 		return friendshipRepository.findAll(pageable);
 	}
+	
+	public void acceptInvitation(Long id) {
+		friendshipRepository.accept(id);
+	}
 }

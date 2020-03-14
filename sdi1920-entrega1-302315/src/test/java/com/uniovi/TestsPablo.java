@@ -1,5 +1,7 @@
 package com.uniovi;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.List;
 
 import org.junit.After;
@@ -154,6 +156,7 @@ public class TestsPablo {
 		PO_View.checkElement(driver, "text", "Diego");
 	}
 
+	
 	// Desde el listado de usuarios de la aplicación, enviar una invitación de amistad a un usuario al
 	// que ya le habíamos enviado la invitación previamente. No debería dejarnos enviar la invitación, se podría
 	// ocultar el botón de enviar invitación o notificar que ya había sido enviada previamente.
@@ -177,5 +180,33 @@ public class TestsPablo {
 //		PO_View.checkElement(driver, "text", "Tus Invitaciones");
 //		PO_View.checkElement(driver, "text", "Diego");
 //	}
+	
+	// Mostrar el listado de invitaciones de amistad recibidas. 
+	// Comprobar con un listado que contenga varias invitaciones recibidas
+	@Test
+	public void Prueba17() {
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		PO_LoginView.fillForm(driver, "clara@email.com", "123456");
+		
+		List<WebElement> elementos = PO_HomeView.checkElement(driver, "free", "//*[@id=\"myNavbar\"]/ul[1]/li[3]/a");
+		elementos.get(0).click();
+		
+		SeleniumUtils.textoNoPresentePagina(driver, "Enrique");
+	}
+	
+	// Sobre el listado de invitaciones recibidas. Hacer click en el botón/enlace de una de ellas y
+	// comprobar que dicha solicitud desaparece del listado de invitaciones.
+	@Test
+	public void Prueba18() {
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		PO_LoginView.fillForm(driver, "clara@email.com", "123456");
+		
+		List<WebElement> elementos = PO_HomeView.checkElement(driver, "free", "//*[@id=\"myNavbar\"]/ul[1]/li[3]/a");
+		elementos.get(0).click();
+		
+		elementos = SeleniumUtils.EsperaCargaPagina(driver, "free", "//tbody/tr",
+				PO_View.getTimeout());
+		assertTrue(elementos.size() == 5);
+	}
 
 }

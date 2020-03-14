@@ -62,5 +62,12 @@ public class FriendshipController {
 		
 		return "invitation/list";
 	}
+	
+	@RequestMapping(value = "/invitation/accept/{id}", method = RequestMethod.GET)
+	public String acceptInvitation(Model model, @PathVariable Long id) {
+		friendshipService.acceptInvitation(id);
+		
+		return "redirect:/invitation/list"; // change this when feature of /friend/list/ is done.
+	}
 
 }
