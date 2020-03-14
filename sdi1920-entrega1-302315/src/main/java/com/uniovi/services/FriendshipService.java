@@ -43,6 +43,10 @@ public class FriendshipService {
 		return friendshipRepository.searchFriendshipSendByUser(pageable, userFromId);
 	}
 	
+	public Page<Friendship> searchFriendshipReceivedByUser(Pageable pageable, Long userToId) {
+		return friendshipRepository.searchFriendshipReceivedByUser(pageable, userToId);
+	}
+	
 	public Page<Friendship> searchFriendshipRequestedToUser(Pageable pageable, Long userToId) {
 		return friendshipRepository.searchFriendshipRequestedToUser(pageable, userToId);
 	}
@@ -57,5 +61,9 @@ public class FriendshipService {
 	
 	public void acceptInvitation(Long id) {
 		friendshipRepository.accept(id);
+	}
+
+	public Page<Friendship> searchFriendsOfUser(Pageable pageable, Long id) {
+		return friendshipRepository.searchFriendsOfUser(pageable, id);
 	}
 }
