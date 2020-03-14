@@ -23,6 +23,15 @@
 					</ul></li>
 					
 				<li><a href="/invitation/list" th:text="#{invitationList.message}">Ver Invitaciones</a></li>
+				
+				<li id="users-menu" class="dropdown" sec:authorize="hasAnyRole('ROLE_USER')"><a
+					class="dropdown-toggle" data-toggle="dropdown" href="#"
+					th:text="#{gestionPosts.message}"> Gestión de Usuarios<span class="caret"></span>
+				</a>
+					<ul class="dropdown-menu">
+						<li><a href="/post/add" th:text="#{agregarPost.message}">Agregar Publicación</a></li>
+						<li><a href="/post/list" th:text="#{verPosts.message}">Ver Publicaciones</a></li>
+					</ul></li>
 
 			</ul>
 			<ul class="nav navbar-nav navbar-right">

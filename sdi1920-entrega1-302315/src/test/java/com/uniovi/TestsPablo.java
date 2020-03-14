@@ -72,103 +72,78 @@ public class TestsPablo {
 	}
 
 	// Inicio de sesión con datos válidos (administrador).
-	@Test
-	public void Prueba5() {
-		// Vamos al formulario de login
-		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
-		PO_LoginView.fillForm(driver, "admin@email.com", "admin");
-		// Comprobamos estar en la zona correcta
-		PO_View.checkElement(driver, "text", "Los usuarios que actualmente figuran en el sistema son los siguientes:");
-	}
-
-	// Inicio de sesión con datos válidos (usuario estándar).
-	@Test
-	public void Prueba6() {
-		// Vamos al formulario de login
-		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
-		PO_LoginView.fillForm(driver, "diego@email.com", "123456");
-		// Comprobamos estar en la zona correcta
-		PO_View.checkElement(driver, "text", "Los usuarios que actualmente figuran en el sistema son los siguientes:");
-	}
-
-	// Inicio de sesión con datos inválidos
-	// (usuario estándar, campo email y contraseña vacíos).
-	@Test
-	public void Prueba7() {
-		// Vamos al formulario de login
-		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
-		PO_LoginView.fillForm(driver, "", "");
-		// Comprobamos estar en la zona correcta
-		PO_View.checkElement(driver, "text", "Identifícate");
-	}
-
-	// Inicio de sesión con datos válidos
-	// (usuario estándar, email existente, pero contraseña incorrecta).
-	@Test
-	public void Prueba8() {
-		// Vamos al formulario de login
-		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
-		PO_LoginView.fillForm(driver, "admin@email.com", "contraseñaIncorrecta");
-		// Comprobamos estar en la zona correcta
-		PO_View.checkElement(driver, "text", "Your email or password is invalid.");
-	}
-
-	// Hacer click en la opción de salir de sesión y comprobar que se redirige
-	// a la página de inicio de sesión (Login).
-	@Test
-	public void Prueba9() {
-		// Vamos al formulario de login
-		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
-		PO_LoginView.fillForm(driver, "admin@email.com", "admin");
-		PO_NavView.clickOption(driver, "logout", "class", "btn btn-primary");
-		// Comprobamos estar en la zona correcta
-		PO_View.checkElement(driver, "text", "Identifícate");
-		PO_View.checkElement(driver, "text", "You have been logged out successfully.");
-	}
-
-	// Comprobar que el botón cerrar sesión no está visible si el usuario no está
-	// autenticado.
-	@Test
-	public void Prueba10() {
-		SeleniumUtils.textoNoPresentePagina(driver, "Desconectar");
-	}
-
-	// Desde el listado de usuarios de la aplicación, enviar una invitación de amistad a un usuario.
-	// Comprobar que la solicitud de amistad aparece en el listado de invitaciones (punto siguiente).
-	@Test
-	public void Prueba15() {
-		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
-		PO_LoginView.fillForm(driver, "diego@email.com", "123456");
-
-		List<WebElement> elementos = PO_HomeView.checkElement(driver, "free", "//td[contains(text(), 'jesus@email.com')]/following-sibling::*/a[contains(@href, 'invitation/send/')]");
-		elementos.get(0).click();
-		
-		PO_NavView.clickOption(driver, "logout", "class", "btn btn-primary");
-		
-		// Comprobamos haber enviado la invitacion
-		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
-		PO_LoginView.fillForm(driver, "jesus@email.com", "123456");
-		
-		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href,'invitation/list')]");
-		elementos.get(0).click();
-		
-		PO_View.checkElement(driver, "text", "Tus Invitaciones");
-		PO_View.checkElement(driver, "text", "Diego");
-	}
-
-	
-	// Desde el listado de usuarios de la aplicación, enviar una invitación de amistad a un usuario al
-	// que ya le habíamos enviado la invitación previamente. No debería dejarnos enviar la invitación, se podría
-	// ocultar el botón de enviar invitación o notificar que ya había sido enviada previamente.
 //	@Test
-//	public void Prueba16() {
+//	public void Prueba5() {
+//		// Vamos al formulario de login
+//		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+//		PO_LoginView.fillForm(driver, "admin@email.com", "admin");
+//		// Comprobamos estar en la zona correcta
+//		PO_View.checkElement(driver, "text", "Los usuarios que actualmente figuran en el sistema son los siguientes:");
+//	}
+//
+//	// Inicio de sesión con datos válidos (usuario estándar).
+//	@Test
+//	public void Prueba6() {
+//		// Vamos al formulario de login
+//		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+//		PO_LoginView.fillForm(driver, "diego@email.com", "123456");
+//		// Comprobamos estar en la zona correcta
+//		PO_View.checkElement(driver, "text", "Los usuarios que actualmente figuran en el sistema son los siguientes:");
+//	}
+//
+//	// Inicio de sesión con datos inválidos
+//	// (usuario estándar, campo email y contraseña vacíos).
+//	@Test
+//	public void Prueba7() {
+//		// Vamos al formulario de login
+//		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+//		PO_LoginView.fillForm(driver, "", "");
+//		// Comprobamos estar en la zona correcta
+//		PO_View.checkElement(driver, "text", "Identifícate");
+//	}
+//
+//	// Inicio de sesión con datos válidos
+//	// (usuario estándar, email existente, pero contraseña incorrecta).
+//	@Test
+//	public void Prueba8() {
+//		// Vamos al formulario de login
+//		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+//		PO_LoginView.fillForm(driver, "admin@email.com", "contraseñaIncorrecta");
+//		// Comprobamos estar en la zona correcta
+//		PO_View.checkElement(driver, "text", "Your email or password is invalid.");
+//	}
+//
+//	// Hacer click en la opción de salir de sesión y comprobar que se redirige
+//	// a la página de inicio de sesión (Login).
+//	@Test
+//	public void Prueba9() {
+//		// Vamos al formulario de login
+//		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+//		PO_LoginView.fillForm(driver, "admin@email.com", "admin");
+//		PO_NavView.clickOption(driver, "logout", "class", "btn btn-primary");
+//		// Comprobamos estar en la zona correcta
+//		PO_View.checkElement(driver, "text", "Identifícate");
+//		PO_View.checkElement(driver, "text", "You have been logged out successfully.");
+//	}
+//
+//	// Comprobar que el botón cerrar sesión no está visible si el usuario no está
+//	// autenticado.
+//	@Test
+//	public void Prueba10() {
+//		SeleniumUtils.textoNoPresentePagina(driver, "Desconectar");
+//	}
+//
+//	// Desde el listado de usuarios de la aplicación, enviar una invitación de amistad a un usuario.
+//	// Comprobar que la solicitud de amistad aparece en el listado de invitaciones (punto siguiente).
+//	@Test
+//	public void Prueba15() {
 //		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
 //		PO_LoginView.fillForm(driver, "diego@email.com", "123456");
 //
-//		List<WebElement> elementos = PO_HomeView.checkElement(driver, "free", "//td[contains(text(), 'clara@email.com')]/following-sibling::*/a[contains(@href, 'invitation/send/')]");
+//		List<WebElement> elementos = PO_HomeView.checkElement(driver, "free", "//td[contains(text(), 'jesus@email.com')]/following-sibling::*/a[contains(@href, 'invitation/send/')]");
 //		elementos.get(0).click();
 //		
-//		PO_View.checkElement(driver, "text", "Tus Invitaciones");
+//		PO_NavView.clickOption(driver, "logout", "class", "btn btn-primary");
 //		
 //		// Comprobamos haber enviado la invitacion
 //		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
@@ -180,33 +155,61 @@ public class TestsPablo {
 //		PO_View.checkElement(driver, "text", "Tus Invitaciones");
 //		PO_View.checkElement(driver, "text", "Diego");
 //	}
-	
-	// Mostrar el listado de invitaciones de amistad recibidas. 
-	// Comprobar con un listado que contenga varias invitaciones recibidas
-	@Test
-	public void Prueba17() {
-		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
-		PO_LoginView.fillForm(driver, "clara@email.com", "123456");
-		
-		List<WebElement> elementos = PO_HomeView.checkElement(driver, "free", "//*[@id=\"myNavbar\"]/ul[1]/li[3]/a");
-		elementos.get(0).click();
-		
-		SeleniumUtils.textoNoPresentePagina(driver, "Enrique");
-	}
+//
+//	
+//	// Desde el listado de usuarios de la aplicación, enviar una invitación de amistad a un usuario al
+//	// que ya le habíamos enviado la invitación previamente. No debería dejarnos enviar la invitación, se podría
+//	// ocultar el botón de enviar invitación o notificar que ya había sido enviada previamente.
+////	@Test
+////	public void Prueba16() {
+////		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+////		PO_LoginView.fillForm(driver, "diego@email.com", "123456");
+////
+////		List<WebElement> elementos = PO_HomeView.checkElement(driver, "free", "//td[contains(text(), 'clara@email.com')]/following-sibling::*/a[contains(@href, 'invitation/send/')]");
+////		elementos.get(0).click();
+////		
+////		PO_View.checkElement(driver, "text", "Tus Invitaciones");
+////		
+////		// Comprobamos haber enviado la invitacion
+////		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+////		PO_LoginView.fillForm(driver, "jesus@email.com", "123456");
+////		
+////		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href,'invitation/list')]");
+////		elementos.get(0).click();
+////		
+////		PO_View.checkElement(driver, "text", "Tus Invitaciones");
+////		PO_View.checkElement(driver, "text", "Diego");
+////	}
+//	
+//	// Mostrar el listado de invitaciones de amistad recibidas. 
+//	// Comprobar con un listado que contenga varias invitaciones recibidas
+//	@Test
+//	public void Prueba17() {
+//		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+//		PO_LoginView.fillForm(driver, "clara@email.com", "123456");
+//		
+//		List<WebElement> elementos = PO_HomeView.checkElement(driver, "free", "//*[@id=\"myNavbar\"]/ul[1]/li[3]/a");
+//		elementos.get(0).click();
+//		
+//		elementos = SeleniumUtils.EsperaCargaPagina(driver, "free", "//tbody/tr",
+//				PO_View.getTimeout());
+//		assertTrue(elementos.size() == 5);
+//	}
 	
 	// Sobre el listado de invitaciones recibidas. Hacer click en el botón/enlace de una de ellas y
 	// comprobar que dicha solicitud desaparece del listado de invitaciones.
 	@Test
-	public void Prueba18() {
+	public void Prueba18() {		
 		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
 		PO_LoginView.fillForm(driver, "clara@email.com", "123456");
 		
 		List<WebElement> elementos = PO_HomeView.checkElement(driver, "free", "//*[@id=\"myNavbar\"]/ul[1]/li[3]/a");
 		elementos.get(0).click();
 		
-		elementos = SeleniumUtils.EsperaCargaPagina(driver, "free", "//tbody/tr",
-				PO_View.getTimeout());
-		assertTrue(elementos.size() == 5);
+		elementos = PO_HomeView.checkElement(driver, "free", "//td[contains(text(), 'Diego')]/following-sibling::*/a[contains(@href, 'invitation/accept/')]");
+		elementos.get(0).click();
+		
+		SeleniumUtils.textoNoPresentePagina(driver, "Diego");
 	}
 
 }
