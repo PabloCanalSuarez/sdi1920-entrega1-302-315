@@ -283,6 +283,7 @@ public class TestsJesus {
 			
 			// We are at login view
 			PO_LoginView.fillForm(driver, "jesus@email.com", "123456");
-			PO_View.checkElement(driver, "text", "HTTP Status 403 – Forbidden");
+			List<WebElement> h1Text = driver.findElements(By.xpath("//html/body/*[local-name() = \"h1\"]"));
+			Assertions.assertEquals("HTTP Status 403 – Forbidden", h1Text.get(0).getText());
 		}
 }

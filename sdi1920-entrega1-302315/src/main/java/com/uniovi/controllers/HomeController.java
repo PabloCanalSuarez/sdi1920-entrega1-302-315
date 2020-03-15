@@ -15,9 +15,4 @@ public class HomeController {
 	public String secret() {
 		return "secret";
 	}
-	
-	@RequestMapping("/accessDenied" )
-	public String accessDenied() {
-		return "accessDenied.html";
-	}
 }
