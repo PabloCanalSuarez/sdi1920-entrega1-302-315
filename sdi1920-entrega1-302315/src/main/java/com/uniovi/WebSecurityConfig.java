@@ -30,6 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 				.antMatchers("/css/**", "/img/**", "/script/**", "/", "/signup", "/login/**").permitAll()
 				.antMatchers("/user/**").authenticated()
+				.antMatchers("/secret").hasAnyAuthority("ROLE_ADMIN")
 				.anyRequest().authenticated()
 					.and()
 				.formLogin() 
@@ -37,8 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.permitAll() 
 					.defaultSuccessUrl("/user/list") 
 					.and()
-				.logout() 
-					.permitAll();
+				.logout().permitAll();
 	}
 
 	@Autowired
