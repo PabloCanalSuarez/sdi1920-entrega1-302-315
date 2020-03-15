@@ -23,7 +23,7 @@ public class UsersService {
 
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	
+
 	@Autowired
 	private RolesService roleService;
 
@@ -53,31 +53,40 @@ public class UsersService {
 	public void deleteUser(Long id) {
 		usersRepository.deleteById(id);
 	}
-	
+
 	public List<User> searchUsersByNameAndSurname(String searchText) {
 		List<User> userList = new ArrayList<User>();
-		searchText = "%"+searchText+"%";
+		searchText = "%" + searchText + "%";
 		userList = usersRepository.searchByNameAndSurname(searchText);
 		return userList;
 	}
-	
+
 	public Page<User> searchUsersByNameSurnameAndMail(Pageable pageable, String searchText) {
 		Page<User> users = new PageImpl<User>(new ArrayList<User>());
-		
-		searchText = "%"+searchText+"%";
+
+		searchText = "%" + searchText + "%";
 		users = usersRepository.searchUsersByNameSurnameAndMail(pageable, searchText);
-		
+
 		return users;
 	}
 
 	public Page<User> getNotAdminUsersWithoutLoggedUser(Pageable pageable) {
 		Page<User> users = new PageImpl<User>(new ArrayList<User>());
-		
+
 		String role = roleService.getRoles()[0];
 		String emailOfUserToSkip = SecurityContextHolder.getContext().getAuthentication().getName();
 		users = usersRepository.searchByRoleAndDontIncludeSpecificUser(pageable, role, emailOfUserToSkip);
-		
+
 		return users;
 	}
-	
+
+	public Page<User> getUsersWithoutLoggedUser(Pageable pageable) {
+		Page<User> users = new PageImpl<User>(new ArrayList<User>());
+
+		String emailOfUserToSkip = SecurityContextHolder.getContext().getAuthentication().getName();
+		users = usersRepository.searchDontIncludeSpecificUser(pageable, emailOfUserToSkip);
+
+		return users;
+	}
+
 }

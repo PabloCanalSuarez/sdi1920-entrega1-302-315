@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,7 @@ import com.uniovi.entities.User;
 import com.uniovi.services.FriendshipService;
 import com.uniovi.services.PostsService;
 import com.uniovi.services.UsersService;
+import com.uniovi.validators.PostFormValidator;
 
 @Controller
 public class PostsController {
@@ -37,18 +39,9 @@ public class PostsController {
 	
 	@Autowired
 	private UsersService usersService;
-
-	@RequestMapping(value = "/post/list")
-	public String getPostsList(Model model) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String email = auth.getName();
-		User user = usersService.getUserByEmail(email);
-		
-		List<Post> posts = postsService.postsOfUser( user.getId() );
-		
-		model.addAttribute("postsList", posts);
-		return "/post/list";
-	}
+	
+	@Autowired
+	private PostFormValidator postValidator;
 	
 	@RequestMapping(value = "/post/add", method = RequestMethod.GET)
 	public String getPost(Model model) {
@@ -57,7 +50,12 @@ public class PostsController {
 	}
 
 	@RequestMapping(value = "/post/add", method = RequestMethod.POST)
-	public String setPost(@Validated Post post, @RequestParam("picture") MultipartFile picture) {
+	public String setPost(@Validated Post post, BindingResult result, @RequestParam("picture") MultipartFile picture) {
+		
+		postValidator.validate(post, result);
+		if (result.hasErrors())
+			return "post/add";
+		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String email = auth.getName();
 		User userFrom = usersService.getUserByEmail(email);
@@ -84,6 +82,16 @@ public class PostsController {
 		}
 	}
 
+	@RequestMapping(value = "/post/list", method = RequestMethod.GET)
+	public String list(Model model) {		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String email = auth.getName();
+		User userFrom = usersService.getUserByEmail(email);
+		
+		model.addAttribute("postsList", postsService.getPostsByUserId(userFrom.getId()));		
+		return "post/list";
+    }
+
 	@RequestMapping(value = "/post/friends/{id}", method = RequestMethod.GET)
 	public String list(Model model, @PathVariable Long id) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -97,7 +105,7 @@ public class PostsController {
 		}
 		
 		// Get posts
-		List<Post> posts = postsService.postsOfUser(id);
+		List<Post> posts = postsService.getPostsByUserId(id);
 		
 		model.addAttribute("postsList", posts);
 		return "post/friends";

@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import com.uniovi.entities.Friendship;
+import com.uniovi.entities.User;
 
 public interface FriendshipRepository extends CrudRepository<Friendship, Long>{
 
@@ -41,4 +42,7 @@ public interface FriendshipRepository extends CrudRepository<Friendship, Long>{
 	@Transactional
 	@Query("UPDATE Friendship f SET f.accepted = 'T' WHERE f.id = ?1")
 	void accept(Long id);
+
+	@Query("SELECT u FROM Friendship f, User u WHERE f.userFrom.id = ?1 AND f.userTo.id = u.id")
+	List<User> getUsersToByUserFrom(Long idUserFrom);
 }

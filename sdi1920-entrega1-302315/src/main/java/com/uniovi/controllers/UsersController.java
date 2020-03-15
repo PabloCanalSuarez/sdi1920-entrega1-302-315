@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.uniovi.entities.User;
+import com.uniovi.services.FriendshipService;
 import com.uniovi.services.RolesService;
 import com.uniovi.services.SecurityService;
 import com.uniovi.services.UsersService;
@@ -32,6 +33,9 @@ public class UsersController {
 	
 	@Autowired
 	private RolesService rolesService;
+	
+	@Autowired
+	private FriendshipService friendshipService;
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(Model model, String error, String logout) {
@@ -45,9 +49,6 @@ public class UsersController {
 	
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public String home(Model model) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String email = auth.getName();
-		User activeUser = usersService.getUserByEmail(email);
 		return "home";
 	}
 	
@@ -55,16 +56,30 @@ public class UsersController {
 	public String getListado(Model model, Pageable pageable, @RequestParam(value="", required=false)String searchText) {
 		Page<User> users = null;
 		
-		if(searchText != null && !searchText.isEmpty()) {
-			users = usersService.searchUsersByNameSurnameAndMail(pageable, searchText.toLowerCase());
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String email = auth.getName();
+		User activeUser = usersService.getUserByEmail(email);
+		
+		if(activeUser.getRole().equals(rolesService.getRoles()[0])) {
+			if(searchText != null && !searchText.isEmpty()) {
+				users = usersService.searchUsersByNameSurnameAndMail(pageable, searchText.toLowerCase());
+			} else {
+				if (searchText == null) searchText = "";
+				users = usersService.getNotAdminUsersWithoutLoggedUser(pageable);
+			}
 		} else {
-			if (searchText == null) searchText = "";
-			users = usersService.getNotAdminUsersWithoutLoggedUser(pageable);
+			if(searchText != null && !searchText.isEmpty()) {
+				users = usersService.searchUsersByNameSurnameAndMail(pageable, searchText.toLowerCase());
+			} else {
+				if (searchText == null) searchText = "";
+				users = usersService.getUsersWithoutLoggedUser(pageable);
+			}
 		}
 		 
 		model.addAttribute("usersList", users.getContent());
 		model.addAttribute("page", users);
 		model.addAttribute("searchText", searchText);
+		model.addAttribute("invitationList", friendshipService.getUsersToByUserFrom(activeUser.getId()));
 		return "user/list";
 	}
 
