@@ -1,11 +1,14 @@
 package com.uniovi.services;
 
+import java.util.Date;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.uniovi.entities.Friendship;
+import com.uniovi.entities.Post;
 import com.uniovi.entities.User;
 
 @Service
@@ -15,6 +18,9 @@ public class InsertDataSampleService {
 	
 	@Autowired
 	private FriendshipService friendshipService;
+
+	@Autowired
+	private PostsService postsService;
 	
 	@Autowired
 	private RolesService rolesService;
@@ -102,5 +108,22 @@ public class InsertDataSampleService {
 		friendshipService.addFriendship(f4);
 		friendshipService.addFriendship(f5);
 		friendshipService.addFriendship(f6);
+		
+		
+		Post p1 = new Post(user2, new Date());
+		p1.setTitle("Post Jesus 0");
+		p1.setContents("Contents of 0");
+		
+		Post p2 = new Post(user2, new Date());
+		p2.setTitle("Post Jesus 1");
+		p2.setContents("Contents of 1");
+		
+		Post p3 = new Post(user4, new Date());
+		p3.setTitle("Post Diego 0");
+		p3.setContents("Contents of 0");
+		
+		postsService.addPost(p1);
+		postsService.addPost(p2);
+		postsService.addPost(p3);
 	}
 }

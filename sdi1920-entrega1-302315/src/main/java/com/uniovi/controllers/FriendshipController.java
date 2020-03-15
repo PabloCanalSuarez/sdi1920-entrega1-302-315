@@ -102,28 +102,7 @@ public class FriendshipController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String email = auth.getName();
 		User userFrom = userService.getUserByEmail(email);
-		/*
-		// Search
-		Page<Friendship> in = friendshipService.searchFriendshipReceivedByUser(pageable, userFrom.getId());
-		Page<Friendship> out = friendshipService.searchFriendshipSendByUser(pageable, userFrom.getId());
-		
-		List<User> inUsr= in.getContent()
-								.stream()
-								.filter( f -> f.isAccepted() )
-								.map( f -> f.getUserFrom() )
-								.collect(Collectors.toList());
-		
-		List<User> outUsr= out.getContent()
-								.stream()
-								.filter( f -> f.isAccepted() )
-								.map( f -> f.getUserTo() )
-								.collect(Collectors.toList());
-		
-		inUsr.addAll(outUsr);
-		
-		Page<User> users = new PageImpl<User>(new ArrayList<User>( inUsr.stream().distinct().collect(Collectors.toList()) ));
-		*/
-		
+
 		Page<Friendship> users = friendshipService.searchFriendsOfUser(pageable, userFrom.getId());
 		
 		// Add attrs
