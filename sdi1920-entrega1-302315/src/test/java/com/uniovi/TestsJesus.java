@@ -19,6 +19,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.uniovi.repositories.UsersRepository;
+import com.uniovi.tests.pageobjects.PO_AddPostView;
 import com.uniovi.tests.pageobjects.PO_HomeView;
 import com.uniovi.tests.pageobjects.PO_LoginView;
 import com.uniovi.tests.pageobjects.PO_Properties;
@@ -391,5 +392,52 @@ public class TestsJesus {
 
 			h1Text = driver.findElements(By.xpath("//html/body/*[local-name() = \"h1\"]"));
 			Assertions.assertEquals("HTTP Status 403 – Forbidden", h1Text.get(0).getText());
+		}
+		
+		@Test
+		public void Prueba29() {
+			DataBaseAccess.removePostsByUser("clara@email.com");
+			
+			// Login and go to add posts
+			PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+			PO_LoginView.fillForm(driver, "clara@email.com", "123456");
+		
+			List<WebElement> elementos = PO_View.checkElement(driver, "id", "posts-menu");
+			elementos.get(0).click();
+			elementos = PO_View.checkElement(driver, "free", "//a[contains(@href,'post/add')]");
+			elementos.get(0).click();
+			
+			
+			// Create a new post with a picture
+			PO_AddPostView.fillForm(driver, "TitLe", "ConTenTs", URL + "/img/sample.jpg");
+			
+			// Auto redirect to list, where post should have a picture
+			PO_View.checkElement(driver, "class", "postPicture");
+			
+			DataBaseAccess.removePostsByUser("clara@email.com");
+		}
+		
+		@Test
+		public void Prueba30() {
+			DataBaseAccess.removePostsByUser("clara@email.com");
+			
+			// Login and go to add posts
+			PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+			PO_LoginView.fillForm(driver, "clara@email.com", "123456");
+		
+			List<WebElement> elementos = PO_View.checkElement(driver, "id", "posts-menu");
+			elementos.get(0).click();
+			elementos = PO_View.checkElement(driver, "free", "//a[contains(@href,'post/add')]");
+			elementos.get(0).click();
+			
+			
+			// Create a new post with NO picture
+			PO_AddPostView.fillForm(driver, "TitLe", "ConTenTs", null);
+			
+			// Auto redirect to list, where post should NO picture
+			List<WebElement> picture = driver.findElements( By.xpath("//*[@id=\"tablePosts\"]/tbody/tr/td[4]") );
+			Assertions.assertEquals(0, picture.size());
+			
+			DataBaseAccess.removePostsByUser("clara@email.com");
 		}
 }
