@@ -2,13 +2,13 @@
 <html lang="en">
 <head th:replace="fragments/head" />
 <body>
-	<!-- Barra de Navegación superior -->
+	<!-- Barra de NavegaciÃ³n superior -->
 	<nav th:replace="fragments/nav" />
 	<div class="container">
-		<h2 th:text="#{agregarPost.message}">Agregar Publicación</h2>
-		<form class="form-horizontal" method="post" action="/post/add">
+		<h2 th:text="#{agregarPost.message}">Agregar PublicaciÃ³n</h2>
+		<form class="form-horizontal" method="post" action="/post/add" enctype="multipart/form-data">
 			<div class="form-group">
-				<label class="control-label col-sm-2" for=”role”>Título:</label>
+				<label class="control-label col-sm-2" for=title>TÃ­tulo:</label>
 				<div class="col-sm-10">
 					<input type="text" class="form-control" name="title"
 						th:placeholder="#{post.titlePH.message}" required="true"
@@ -23,6 +23,7 @@
 					/>
 				</div>
 			</div>
+			<input type="file" name="picture" accept=".png,.jpg,.jpeg,.gif" />
 			<div class="form-group">
 				<div class="col-sm-offset-2 col-sm-10">
 					<button type="submit" class="btn btn-primary" th:text="#{submitBtn.message}">Enviar</button>

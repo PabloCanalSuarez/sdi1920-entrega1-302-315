@@ -13,12 +13,17 @@
 					<th th:text="#{post.date.message}">Fecha</th>
 					<th th:text="#{invitation.title.message}">Título</th>
 					<th class="col-md-1"></th>
+					<th class="col-md-1"></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="post : ${postsList}">
 					<td th:text="${post.date}">Fecha</td>
 					<td th:text="${post.title}">Título</td>
+					<td th:text="${post.contents}">Text</td>
+					<td th:if="${post.hasPicture}">
+						<img class="postPicture" height="300" width="300" th:src="${'/pictures/' + post.id}" />
+					</td>
 				</tr>
 			</tbody>
 		</table>
