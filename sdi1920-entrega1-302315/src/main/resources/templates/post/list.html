@@ -5,13 +5,14 @@
 	<!-- Barra de Navegación superior -->
 	<nav th:replace="fragments/nav" />
 	<div class="container">
-		<h2 th:text="#{post.message}">Tus Publicaciones</h2>
+		<h2 th:text="#{postList.message}">Tus Publicaciones</h2>
 
 		<table class="table table-hover" id="tablePosts">
 			<thead>
 				<tr>
 					<th th:text="#{post.date.message}">Fecha</th>
-					<th th:text="#{invitation.title.message}">Título</th>
+					<th th:text="#{post.title.message}">Título</th>
+					<th th:text="#{post.contents.message}">Contenido</th>
 					<th class="col-md-1"></th>
 					<th class="col-md-1"></th>
 				</tr>

@@ -17,7 +17,6 @@
 					th:text="#{gestionUsuarios.message}"> Gestión de Usuarios<span class="caret"></span>
 				</a>
 					<ul class="dropdown-menu">
-						<li><a href="/user/add" th:text="#{agregarUsuario.message}">Agregar Usuario</a></li>
 						<li><a href="/user/list" th:text="#{verUsuarios.message}">Ver Usuarios</a></li>
 						<li><a href="/user/friends" th:text="#{verAmigos.message}">Ver Amigos</a></li>
 					</ul></li>
@@ -26,7 +25,7 @@
 				
 				<li id="posts-menu" class="dropdown" sec:authorize="hasAnyRole('ROLE_USER')"><a
 					class="dropdown-toggle" data-toggle="dropdown" href="#"
-					th:text="#{gestionPosts.message}"> Gestión de Usuarios<span class="caret"></span>
+					th:text="#{gestionPosts.message}"> Gestión de Posts<span class="caret"></span>
 				</a>
 					<ul class="dropdown-menu">
 						<li><a href="/post/add" th:text="#{agregarPost.message}">Agregar Publicación</a></li>
