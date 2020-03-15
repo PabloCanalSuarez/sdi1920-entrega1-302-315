@@ -25,6 +25,7 @@ import com.uniovi.tests.pageobjects.PO_Properties;
 import com.uniovi.tests.pageobjects.PO_RegisterView;
 import com.uniovi.tests.pageobjects.PO_View;
 import com.uniovi.tests.util.DataBaseAccess;
+import com.uniovi.tests.util.SeleniumUtils;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestsJesus {
@@ -264,8 +265,7 @@ public class TestsJesus {
 			Assertions.assertEquals(1, usersCount);
 		}
 		
-		
-		
+  
 		@Test
 		public void Prueba19() {
 			DataBaseAccess.removeFriends( DataBaseAccess.getUserId("clara@email.com") );
@@ -316,7 +316,14 @@ public class TestsJesus {
 			// Delete invitations
 			DataBaseAccess.removeFriends( DataBaseAccess.getUserId("clara@email.com") );
 		}
-		
+
+  	@Test
+		public void Prueba21() {
+			driver.navigate().to(URL + "/user/list");
+			// Check we are at login view
+			PO_View.checkElement(driver, "id", "loginForm");
+		}
+  
 		@Test
 		public void Prueba22() {
 			driver.navigate().to(URL + "/post/list");
@@ -324,9 +331,19 @@ public class TestsJesus {
 			PO_View.checkElement(driver, "id", "loginForm");
 			
 			driver.navigate().to(URL + "/post/friends/2");
-			// Check we are at login view
+      // Check we are at login view
 			PO_View.checkElement(driver, "id", "loginForm");
-		}
+    }
+  
+		@Test
+		public void Prueba23() {
+			driver.navigate().to(URL + "/secret");
+			
+			// We are at login view
+			PO_LoginView.fillForm(driver, "jesus@email.com", "123456");
+			List<WebElement> h1Text = driver.findElements(By.xpath("//html/body/*[local-name() = \"h1\"]"));
+			Assertions.assertEquals("HTTP Status 403 – Forbidden", h1Text.get(0).getText());
+    }
 		
 		@Test
 		public void Prueba27() {
