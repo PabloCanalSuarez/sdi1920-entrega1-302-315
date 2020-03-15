@@ -64,4 +64,8 @@ public class FriendshipService {
 	public List<User> getUsersToByUserFrom(Long idUserFrom) {
 		return friendshipRepository.getUsersToByUserFrom(idUserFrom);
 	}
+	
+	public List<Friendship> searchFriendsOfUser(Long id) {
+		return friendshipRepository.searchFriendsOfUser(id);
+	}
 }

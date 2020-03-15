@@ -19,12 +19,14 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.uniovi.repositories.UsersRepository;
+import com.uniovi.tests.pageobjects.PO_AddPostView;
 import com.uniovi.tests.pageobjects.PO_HomeView;
 import com.uniovi.tests.pageobjects.PO_LoginView;
 import com.uniovi.tests.pageobjects.PO_Properties;
 import com.uniovi.tests.pageobjects.PO_RegisterView;
 import com.uniovi.tests.pageobjects.PO_View;
 import com.uniovi.tests.util.DataBaseAccess;
+import com.uniovi.tests.util.SeleniumUtils;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestsJesus {
@@ -264,10 +266,11 @@ public class TestsJesus {
 			Assertions.assertEquals(1, usersCount);
 		}
 		
-		
-		
+  
 		@Test
 		public void Prueba19() {
+			DataBaseAccess.removeFriends( DataBaseAccess.getUserId("clara@email.com") );
+			
 			PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
 			PO_LoginView.fillForm(driver, "clara@email.com", "123456");
 			
@@ -313,5 +316,128 @@ public class TestsJesus {
 			
 			// Delete invitations
 			DataBaseAccess.removeFriends( DataBaseAccess.getUserId("clara@email.com") );
+		}
+
+  	@Test
+		public void Prueba21() {
+			driver.navigate().to(URL + "/user/list");
+			// Check we are at login view
+			PO_View.checkElement(driver, "id", "loginForm");
+		}
+  
+		@Test
+		public void Prueba22() {
+			driver.navigate().to(URL + "/post/list");
+			// Check we are at login view
+			PO_View.checkElement(driver, "id", "loginForm");
+			
+			driver.navigate().to(URL + "/post/friends/2");
+      // Check we are at login view
+			PO_View.checkElement(driver, "id", "loginForm");
+    }
+  
+		@Test
+		public void Prueba23() {
+			driver.navigate().to(URL + "/secret");
+			
+			// We are at login view
+			PO_LoginView.fillForm(driver, "jesus@email.com", "123456");
+			List<WebElement> h1Text = driver.findElements(By.xpath("//html/body/*[local-name() = \"h1\"]"));
+			Assertions.assertEquals("HTTP Status 403 – Forbidden", h1Text.get(0).getText());
+    }
+		
+		@Test
+		public void Prueba27() {
+			DataBaseAccess.removeFriends( DataBaseAccess.getUserId("clara@email.com") );
+			
+			PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+			PO_LoginView.fillForm(driver, "clara@email.com", "123456");
+			
+			// Accept Jesus as friend (as he has 2 posts)
+			PO_HomeView.clickOption(driver, "invitation/list", "id", "tableInvitations");
+			List<WebElement> friendsList = driver.findElements(By.xpath(
+					"//*[@id=\"tableInvitations\"]/tbody/tr[td[2]/text()='jesus@email.com']/td[3]/a")
+			);
+			friendsList.get(0).click();
+			
+			// Click on friends view posts
+			List<WebElement> elementos = PO_View.checkElement(driver, "id", "users-menu");
+			elementos.get(0).click();
+			elementos = PO_View.checkElement(driver, "free", "//a[contains(@href,'user/friends')]");
+			elementos.get(0).click();
+			
+			List<WebElement> friends = driver.findElements(By.xpath("//*[@id=\"tableFriends\"]/tbody/tr/td[4]/a"));
+			friends.get(0).click();
+			
+			// Count Posts
+			List<WebElement> postsOfJesus = driver.findElements(By.xpath("//*[@id=\"tablePosts\"]/tbody/tr"));
+			int numPostsOfJesus = DataBaseAccess.getPostsByUser("jesus@email.com");
+			Assertions.assertEquals(numPostsOfJesus, postsOfJesus.size());
+			
+			// Delete invitations
+			DataBaseAccess.removeFriends( DataBaseAccess.getUserId("clara@email.com") );
+		}
+		
+		@Test
+		public void Prueba28() {
+			PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+			PO_LoginView.fillForm(driver, "clara@email.com", "123456");
+			
+			driver.navigate().to(URL + "/post/friends/10");
+
+			List<WebElement> h1Text = driver.findElements(By.xpath("//html/body/*[local-name() = \"h1\"]"));
+			Assertions.assertEquals("HTTP Status 403 – Forbidden", h1Text.get(0).getText());
+			
+			driver.navigate().to(URL + "/post/friends/2");
+
+			h1Text = driver.findElements(By.xpath("//html/body/*[local-name() = \"h1\"]"));
+			Assertions.assertEquals("HTTP Status 403 – Forbidden", h1Text.get(0).getText());
+		}
+		
+		@Test
+		public void Prueba29() {
+			DataBaseAccess.removePostsByUser("clara@email.com");
+			
+			// Login and go to add posts
+			PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+			PO_LoginView.fillForm(driver, "clara@email.com", "123456");
+		
+			List<WebElement> elementos = PO_View.checkElement(driver, "id", "posts-menu");
+			elementos.get(0).click();
+			elementos = PO_View.checkElement(driver, "free", "//a[contains(@href,'post/add')]");
+			elementos.get(0).click();
+			
+			
+			// Create a new post with a picture
+			PO_AddPostView.fillForm(driver, "TitLe", "ConTenTs", URL + "/img/sample.jpg");
+			
+			// Auto redirect to list, where post should have a picture
+			PO_View.checkElement(driver, "class", "postPicture");
+			
+			DataBaseAccess.removePostsByUser("clara@email.com");
+		}
+		
+		@Test
+		public void Prueba30() {
+			DataBaseAccess.removePostsByUser("clara@email.com");
+			
+			// Login and go to add posts
+			PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+			PO_LoginView.fillForm(driver, "clara@email.com", "123456");
+		
+			List<WebElement> elementos = PO_View.checkElement(driver, "id", "posts-menu");
+			elementos.get(0).click();
+			elementos = PO_View.checkElement(driver, "free", "//a[contains(@href,'post/add')]");
+			elementos.get(0).click();
+			
+			
+			// Create a new post with NO picture
+			PO_AddPostView.fillForm(driver, "TitLe", "ConTenTs", null);
+			
+			// Auto redirect to list, where post should NO picture
+			List<WebElement> picture = driver.findElements( By.xpath("//*[@id=\"tablePosts\"]/tbody/tr/td[4]") );
+			Assertions.assertEquals(0, picture.size());
+			
+			DataBaseAccess.removePostsByUser("clara@email.com");
 		}
 }

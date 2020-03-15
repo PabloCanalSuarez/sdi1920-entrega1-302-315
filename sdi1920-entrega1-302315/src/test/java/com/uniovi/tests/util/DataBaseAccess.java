@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import com.uniovi.entities.Post;
 import com.uniovi.entities.User;
 
 public class DataBaseAccess {
@@ -162,5 +163,94 @@ public class DataBaseAccess {
 			}
 		}
 		return result;
+	}
+
+	public static Integer getPostsByUser(String email) {
+		String query = "SELECT count(*) FROM Post p, User u WHERE u.email=? AND p.user_id = u.id";
+		
+		Connection c = null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		
+		Integer result = null;
+
+		try {			
+			c = getConnection();	
+			st = c.prepareStatement(query);
+			st.setString(1, email);
+			rs = st.executeQuery();
+			if (rs.next()) {
+				result = rs.getInt(1);
+			}						
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			try {
+				if ( rs != null) { rs.close(); }				
+				if ( st != null) { st.close(); }
+				if ( c != null) { c.close(); }
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		return result;
+	}
+	
+	public static void removePostsByUser(String email) {
+		String query = "SELECT * FROM Post p, User u WHERE u.email=? AND p.user_id = u.id";
+		
+		Connection c = null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		
+		List<Post> result = new ArrayList<>();
+
+		try {			
+			c = getConnection();
+			st = c.prepareStatement(query);
+			st.setString(1, email);
+			rs = st.executeQuery();
+			while(rs.next()) {
+				Post post = new Post();
+				post.setId( rs.getInt("id") );
+				result.add(post);
+			}	
+			
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			try {
+				if ( st != null) { st.close(); }
+				if ( c != null) { c.close(); }
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		
+		result.forEach( p -> removePost(p.getId()));
+	}
+	
+	public static void removePost(Long id) {
+		String query = "DELETE FROM Post WHERE id=?";
+		
+		Connection c = null;
+		PreparedStatement st = null;
+
+		try {			
+			c = getConnection();
+			st = c.prepareStatement(query);
+			st.setLong(1, id);
+			st.executeUpdate();
+			
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			try {
+				if ( st != null) { st.close(); }
+				if ( c != null) { c.close(); }
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+		}
 	}
 }

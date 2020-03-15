@@ -33,6 +33,9 @@ public interface FriendshipRepository extends CrudRepository<Friendship, Long>{
 	@Query("SELECT f FROM Friendship f WHERE f.userFrom.id = ?1 AND f.accepted = 'T'")
 	Page<Friendship> searchFriendsOfUser(Pageable pageable, Long id);
 	
+	@Query("SELECT f FROM Friendship f WHERE f.userFrom.id = ?1 AND f.accepted = 'T'")
+	List<Friendship> searchFriendsOfUser(Long id);
+	
 	Page<Friendship> findAll(Pageable pageable);
 	
 	@Modifying

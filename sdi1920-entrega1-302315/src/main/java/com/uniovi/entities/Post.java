@@ -21,6 +21,7 @@ public class Post {
 	private Date date;
 	private String title;
 	private String contents;
+	private boolean hasPicture;
 	
 	public Post(User user, Date date) {
 		super();
@@ -69,6 +70,13 @@ public class Post {
 	public void setContents(String contents) {
 		this.contents = contents;
 	}
-	
+
+	public boolean isHasPicture() {
+		return hasPicture;
+	}
+
+	public void setHasPicture(boolean hasPicture) {
+		this.hasPicture = hasPicture;
+	}
 	
 }
