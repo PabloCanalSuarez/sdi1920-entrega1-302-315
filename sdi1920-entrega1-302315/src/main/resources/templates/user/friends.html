@@ -21,6 +21,9 @@
 					<td th:text="${friend.userTo.email}">Email</td>
 					<td th:text="${friend.userTo.name}">Name</td>
 					<td th:text="${friend.userTo.lastName}">Surname</td>
+					<td>
+						<a th:href="${'/post/friends/' + friend.userTo.id}" th:text="#{friendsList.verPublicaciones}">modificar</a>
+              		</td>
 				</tr>
 			</tbody>
 		</table>

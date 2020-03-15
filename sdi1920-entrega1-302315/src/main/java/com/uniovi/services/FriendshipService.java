@@ -66,4 +66,8 @@ public class FriendshipService {
 	public Page<Friendship> searchFriendsOfUser(Pageable pageable, Long id) {
 		return friendshipRepository.searchFriendsOfUser(pageable, id);
 	}
+	
+	public List<Friendship> searchFriendsOfUser(Long id) {
+		return friendshipRepository.searchFriendsOfUser(id);
+	}
 }

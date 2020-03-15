@@ -28,4 +28,8 @@ public class PostsService {
 	public Post getPost(Long id) {
 		return postsRepository.findById(id).get();
 	}
+	
+	public List<Post> postsOfUser(Long id) {
+		return postsRepository.postsOfUser(id);
+	}
 }
