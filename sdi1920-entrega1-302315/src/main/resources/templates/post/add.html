@@ -6,7 +6,7 @@
 	<nav th:replace="fragments/nav" />
 	<div class="container">
 		<h2 th:text="#{agregarPost.message}">Agregar Publicación</h2>
-		<form class="form-horizontal" method="post" action="/post/add">
+		<form class="form-horizontal" method="post" action="/post/add" id="postForm">
 			<div class="form-group">
 				<label class="control-label col-sm-2" for=”role”>Título:</label>
 				<div class="col-sm-10">

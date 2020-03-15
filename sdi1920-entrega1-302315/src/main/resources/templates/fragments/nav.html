@@ -24,7 +24,7 @@
 					
 				<li><a href="/invitation/list" th:text="#{invitationList.message}">Ver Invitaciones</a></li>
 				
-				<li id="users-menu" class="dropdown" sec:authorize="hasAnyRole('ROLE_USER')"><a
+				<li id="posts-menu" class="dropdown" sec:authorize="hasAnyRole('ROLE_USER')"><a
 					class="dropdown-toggle" data-toggle="dropdown" href="#"
 					th:text="#{gestionPosts.message}"> Gestión de Usuarios<span class="caret"></span>
 				</a>

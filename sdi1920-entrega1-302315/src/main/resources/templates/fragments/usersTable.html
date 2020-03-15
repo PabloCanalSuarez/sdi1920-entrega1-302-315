@@ -14,7 +14,12 @@
 				<td th:text="${user.name}">Nombre</td>
 				<td th:text="${user.lastName}">Apellidos</td>
 				<td><a sec:authorize="hasRole('ROLE_USER')"
-				th:href="${'/invitation/send/' + user.id}" th:text="#{sendFriendRequestBtn.message}">agregar amigo</a></td>
+				th:href="${'/invitation/send/' + user.id}" 
+				th:text="#{sendFriendRequestBtn.message}"
+				th:if="${not invitationList.contains(user)}">agregar amigo</a></td>
+				<td><span sec:authorize="hasRole('ROLE_USER')"
+				th:text="#{sendFriendRequestDone.message}"
+				th:if="${invitationList.contains(user)}">petición enviada</span></td>
 			</tr>
 		</tbody>
 	</table>
