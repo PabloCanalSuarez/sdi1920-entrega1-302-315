@@ -33,11 +33,15 @@ public class UsersController {
 	@Autowired
 	private RolesService rolesService;
 
-	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login(Model model) {
-		return "login";
-	}
+    public String login(Model model, String error, String logout) {
+        if (error != null)
+            model.addAttribute("error", "Your email or password is invalid.");
+        if (logout != null)
+            model.addAttribute("message", "You have been logged out successfully.");
+
+        return "login";
+    }
 	
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public String home(Model model) {

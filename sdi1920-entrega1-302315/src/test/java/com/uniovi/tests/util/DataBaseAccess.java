@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,7 +16,7 @@ import java.util.Properties;
 import com.uniovi.entities.User;
 
 public class DataBaseAccess {
-	static public Connection getConnection() {
+	static private Connection getConnection() {
 		/*
 		 * Crea una conexión usando los datos en el archivo config.properties
 		 */
@@ -79,5 +80,87 @@ public class DataBaseAccess {
 			}
 		}
 		return users;
+	}
+	
+	public static void removeUser(String email) {
+		String query = "DELETE FROM User WHERE email = ?";
+		
+		Connection c = null;
+		PreparedStatement st = null;
+
+		try {			
+			c = getConnection();	
+			st = c.prepareStatement(query);	
+			st.setString(1, email);
+			st.executeUpdate();
+			
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			try {
+				if ( st != null) { st.close(); }
+				if ( c != null) { c.close(); }
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+		}
+	}
+	
+	public static void removeFriends(Long idClara) {
+		String query = "UPDATE Friendship " + 
+				"SET accepted = 'F'" + 
+				"WHERE user_to_id=? OR user_from_id=?";
+		
+		Connection c = null;
+		PreparedStatement st = null;
+
+		try {			
+			c = getConnection();	
+			st = c.prepareStatement(query);	
+			st.setLong(1, idClara);
+			st.setLong(2, idClara);
+			st.executeUpdate();
+			
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			try {
+				if ( st != null) { st.close(); }
+				if ( c != null) { c.close(); }
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+		}
+	}
+
+	public static Long getUserId(String email) {
+		String query = "SELECT id FROM User WHERE email=?";
+		
+		Connection c = null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		
+		Long result = null;
+
+		try {			
+			c = getConnection();	
+			st = c.prepareStatement(query);
+			st.setString(1, email);
+			rs = st.executeQuery();
+			if (rs.next()) {
+				result = rs.getLong("id");
+			}						
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			try {
+				if ( rs != null) { rs.close(); }				
+				if ( st != null) { st.close(); }
+				if ( c != null) { c.close(); }
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		return result;
 	}
 }

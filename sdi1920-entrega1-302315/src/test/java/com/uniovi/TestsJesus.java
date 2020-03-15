@@ -84,6 +84,9 @@ public class TestsJesus {
 			// We are in the correct view
 			PO_View.checkElement(driver, "text", "Esta es una zona privada la web");
 			System.err.println("TODO: Change element checked for test to pass");
+			
+			// Delete registration
+			DataBaseAccess.removeUser("myEmail@dir.com");
 		}
 		
 		@Test
@@ -126,7 +129,7 @@ public class TestsJesus {
 		public void Prueba11() {
 			
 			PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
-			PO_LoginView.fillForm(driver, "admin@email.com", "123456");
+			PO_LoginView.fillForm(driver, "admin@email.com", "admin");
 			
 			List<WebElement> elementos = PO_View.checkElement(driver, "id", "users-menu");
 			elementos.get(0).click();
@@ -159,7 +162,7 @@ public class TestsJesus {
 		@Test
 		public void Prueba12() {
 			PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
-			PO_LoginView.fillForm(driver, "admin@email.com", "123456");
+			PO_LoginView.fillForm(driver, "admin@email.com", "admin");
 			
 			List<WebElement> elementos = PO_View.checkElement(driver, "id", "users-menu");
 			elementos.get(0).click();
@@ -195,7 +198,7 @@ public class TestsJesus {
 		@Test
 		public void Prueba13() {
 			PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
-			PO_LoginView.fillForm(driver, "admin@email.com", "123456");
+			PO_LoginView.fillForm(driver, "admin@email.com", "admin");
 			
 			List<WebElement> elementos = PO_View.checkElement(driver, "id", "users-menu");
 			elementos.get(0).click();
@@ -218,7 +221,7 @@ public class TestsJesus {
 		@Test
 		public void Prueba14() {
 			PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
-			PO_LoginView.fillForm(driver, "admin@email.com", "123456");
+			PO_LoginView.fillForm(driver, "admin@email.com", "admin");
 			
 			List<WebElement> elementos = PO_View.checkElement(driver, "id", "users-menu");
 			elementos.get(0).click();
@@ -262,7 +265,56 @@ public class TestsJesus {
 			Assertions.assertEquals(1, usersCount);
 		}
 		
-		
+  
+		@Test
+		public void Prueba19() {
+			PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+			PO_LoginView.fillForm(driver, "clara@email.com", "123456");
+			
+			// Clara has no friends
+			List<WebElement> elementos = PO_View.checkElement(driver, "id", "users-menu");
+			elementos.get(0).click();
+			elementos = PO_View.checkElement(driver, "free", "//a[contains(@href,'user/friends')]");
+			elementos.get(0).click();
+			
+			List<WebElement> friends = driver.findElements(By.xpath("//*[@id=\"tableFriends\"]/tbody/tr"));
+			Assertions.assertEquals(0, friends.size());
+			
+			// Accepts 1
+			PO_HomeView.clickOption(driver, "invitation/list", "id", "tableInvitations");
+			List<WebElement> friendsList = driver.findElements(By.xpath("//*[@id=\"tableInvitations\"]/tbody/tr[1]/td[3]/a"));
+			friendsList.get(0).click();
+			
+			// has one
+			elementos = PO_View.checkElement(driver, "id", "users-menu");
+			elementos.get(0).click();
+			elementos = PO_View.checkElement(driver, "free", "//a[contains(@href,'user/friends')]");
+			elementos.get(0).click();
+			
+			friends = driver.findElements(By.xpath("//*[@id=\"tableFriends\"]/tbody/tr"));
+			Assertions.assertEquals(1, friends.size());
+			
+			// Accepts another 2
+			PO_HomeView.clickOption(driver, "invitation/list", "id", "tableInvitations");
+			friendsList = driver.findElements(By.xpath("//*[@id=\"tableInvitations\"]/tbody/tr[1]/td[3]/a"));
+			friendsList.get(0).click();
+			friendsList = driver.findElements(By.xpath("//*[@id=\"tableInvitations\"]/tbody/tr[1]/td[3]/a"));
+			friendsList.get(0).click();
+			
+			// has 3
+			elementos = PO_View.checkElement(driver, "id", "users-menu");
+			elementos.get(0).click();
+			elementos = PO_View.checkElement(driver, "free", "//a[contains(@href,'user/friends')]");
+			elementos.get(0).click();
+			
+			friends = driver.findElements(By.xpath("//*[@id=\"tableFriends\"]/tbody/tr"));
+			Assertions.assertEquals(3, friends.size());
+			
+			
+			// Delete invitations
+			DataBaseAccess.removeFriends( DataBaseAccess.getUserId("clara@email.com") );
+		}
+  
 		
 		@Test
 		public void Prueba21() {
@@ -285,5 +337,5 @@ public class TestsJesus {
 			PO_LoginView.fillForm(driver, "jesus@email.com", "123456");
 			List<WebElement> h1Text = driver.findElements(By.xpath("//html/body/*[local-name() = \"h1\"]"));
 			Assertions.assertEquals("HTTP Status 403 – Forbidden", h1Text.get(0).getText());
-		}
+    }
 }
