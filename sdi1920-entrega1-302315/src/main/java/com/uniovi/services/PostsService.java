@@ -32,4 +32,8 @@ public class PostsService {
 	public List<Post> getPostsByUserId(Long id) {
 		return postsRepository.findPostsById(id);
 	}
+
+	public void deletePost(Long id) {
+		postsRepository.deleteById(id);
+	}
 }

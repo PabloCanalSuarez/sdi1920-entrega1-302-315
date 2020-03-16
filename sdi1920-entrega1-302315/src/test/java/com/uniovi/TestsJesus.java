@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -439,5 +440,114 @@ public class TestsJesus {
 			Assertions.assertEquals(0, picture.size());
 			
 			DataBaseAccess.removePostsByUser("clara@email.com");
+		}
+
+		
+		@Test
+		public void Prueba32() {
+			PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+			PO_LoginView.fillForm(driver, "admin@email.com", "admin");
+		
+			// Nos redirige a la vista con la lista
+			
+			// Guardamos el email del primer usuario
+			String email = driver.findElement( By.xpath("//*[@id=\"tableUsers\"]/tbody/tr[1]/td[1]") ).getText(); 
+			
+			// Seleccionamos el primer usuario y lo borramos
+			WebElement checkbox = driver.findElement( By.xpath("//*[@id=\"tableUsers\"]/tbody/tr[1]/td[6]/input") );
+			checkbox.click();
+			
+			WebElement btnBorrar = driver.findElement( By.xpath("//*[@id=\"btnDeleteUser\"]") );
+			btnBorrar.click();
+			
+			// Comprobamos que el email que figura es distinto
+			Assert.assertNotEquals(email, driver.findElement( By.xpath("//*[@id=\"tableUsers\"]/tbody/tr[1]/td[1]") ).getText());
+		}
+		
+		@Test
+		public void Prueba33() {
+			PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+			PO_LoginView.fillForm(driver, "admin@email.com", "admin");
+		
+			// Nos redirige a la vista con la lista
+			
+			//Navegamos hasta la última página
+			boolean isNextPage = false;
+			do {
+				
+				// Check If There is next page
+				List<WebElement> nextPageLink = driver.findElements(By.xpath("//*[@id=\"nextPageOfList\"]/a"));
+				if ( !nextPageLink.isEmpty() ) {
+					nextPageLink.get(0).click();
+					isNextPage = true;
+				} else {
+					isNextPage = false;
+				}
+				
+			} while (isNextPage);
+			
+			// Guardamos el email del último usuario
+			List<WebElement> users = driver.findElements(By.xpath("//*[@id=\"tableUsers\"]/tbody/tr"));
+			String email = users.get( users.size()-1 ).findElement( By.xpath("//td[1]") ).getText();
+			
+			// Seleccionamos el último usuario y lo borramos
+			WebElement checkbox = users.get( users.size()-1 ).findElement( By.xpath("//td[6]/input") );
+			checkbox.click();
+			
+			WebElement btnBorrar = driver.findElement( By.xpath("//*[@id=\"btnDeleteUser\"]") );
+			btnBorrar.click();
+			
+			// Comprobamos que el email que figura es distinto
+			
+			isNextPage = false;
+			do {
+				
+				// Check If There is next page
+				List<WebElement> nextPageLink = driver.findElements(By.xpath("//*[@id=\"nextPageOfList\"]/a"));
+				if ( !nextPageLink.isEmpty() ) {
+					nextPageLink.get(0).click();
+					isNextPage = true;
+				} else {
+					isNextPage = false;
+				}
+				
+			} while (isNextPage);
+			
+			users = driver.findElements(By.xpath("//*[@id=\"tableUsers\"]/tbody/tr"));
+			Assert.assertNotEquals(email, users.get( users.size()-1 ).findElement( By.xpath("//td[1]") ).getText());
+		}
+		
+		@Test
+		public void Prueba34() {
+			PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+			PO_LoginView.fillForm(driver, "admin@email.com", "admin");
+		
+			// Nos redirige a la vista con la lista
+			
+			// Guardamos los 3 emails
+			String[] emails = new String[3];
+			emails[0] = driver.findElement( By.xpath("//*[@id=\"tableUsers\"]/tbody/tr[1]/td[1]") ).getText();
+			emails[1] = driver.findElement( By.xpath("//*[@id=\"tableUsers\"]/tbody/tr[2]/td[1]") ).getText();
+			emails[2] = driver.findElement( By.xpath("//*[@id=\"tableUsers\"]/tbody/tr[3]/td[1]") ).getText();
+			
+			// Seleccionamos los usuarios y los borramos
+			WebElement checkbox = driver.findElement( By.xpath("//*[@id=\"tableUsers\"]/tbody/tr[1]/td[6]/input") );
+			checkbox.click();
+			checkbox = driver.findElement( By.xpath("//*[@id=\"tableUsers\"]/tbody/tr[2]/td[6]/input") );
+			checkbox.click();
+			checkbox = driver.findElement( By.xpath("//*[@id=\"tableUsers\"]/tbody/tr[3]/td[6]/input") );
+			checkbox.click();
+			
+			WebElement btnBorrar = driver.findElement( By.xpath("//*[@id=\"btnDeleteUser\"]") );
+			btnBorrar.click();
+			
+			// Comprobamos que el email que figura es distinto
+			Assert.assertNotEquals(emails[0], driver.findElement( By.xpath("//*[@id=\"tableUsers\"]/tbody/tr[1]/td[1]") ).getText());
+			Assert.assertNotEquals(emails[1], driver.findElement( By.xpath("//*[@id=\"tableUsers\"]/tbody/tr[1]/td[1]") ).getText());
+			Assert.assertNotEquals(emails[2], driver.findElement( By.xpath("//*[@id=\"tableUsers\"]/tbody/tr[1]/td[1]") ).getText());
+			
+			/*
+			 * Buscamos en la primera, para asegurarnos de que el 2 no haya sustituido al 1 (que hay habido un shift en las posiciones)
+			 */
 		}
 }
