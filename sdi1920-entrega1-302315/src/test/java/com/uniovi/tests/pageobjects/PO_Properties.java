@@ -20,7 +20,7 @@ public class PO_Properties {
 	//static Properties p = new Properties();
 	public PO_Properties(String Path) //throws FileNotFoundException, IOException 
 	{
-		this.Path = Path;
+		//this.Path = Path;
 		//p.load(new FileReader(Path));
 		//p.getProperty()
 	}

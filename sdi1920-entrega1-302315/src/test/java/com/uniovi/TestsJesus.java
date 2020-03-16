@@ -1,7 +1,5 @@
 package com.uniovi;
 
-import static org.junit.Assert.fail;
-
 import java.util.List;
 
 import org.junit.After;
@@ -17,9 +15,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import com.uniovi.repositories.UsersRepository;
 import com.uniovi.tests.pageobjects.PO_AddPostView;
 import com.uniovi.tests.pageobjects.PO_HomeView;
 import com.uniovi.tests.pageobjects.PO_LoginView;
@@ -27,7 +23,6 @@ import com.uniovi.tests.pageobjects.PO_Properties;
 import com.uniovi.tests.pageobjects.PO_RegisterView;
 import com.uniovi.tests.pageobjects.PO_View;
 import com.uniovi.tests.util.DataBaseAccess;
-import com.uniovi.tests.util.SeleniumUtils;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestsJesus {
@@ -41,9 +36,6 @@ public class TestsJesus {
 		
 		static WebDriver driver = getDriver(PathFirefox65, Geckdriver024);
 		static String URL = "http://localhost:8080";
-		
-		@Autowired
-		private UsersRepository usersRepository;
 
 		public static WebDriver getDriver(String PathFirefox, String Geckdriver) {
 			System.setProperty("webdriver.firefox.bin", PathFirefox);
@@ -84,8 +76,7 @@ public class TestsJesus {
 			PO_RegisterView.fillForm(driver, "myEmail@dir.com", "Josefo", "Perez", "1234", "1234");
 			
 			// We are in the correct view
-			PO_View.checkElement(driver, "text", "Esta es una zona privada la web");
-			System.err.println("TODO: Change element checked for test to pass");
+			PO_View.checkElement(driver, "id", "titleHome");
 			
 			// Delete registration
 			DataBaseAccess.removeUser("myEmail@dir.com");
@@ -131,7 +122,7 @@ public class TestsJesus {
 		public void Prueba11() {
 			
 			PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
-			PO_LoginView.fillForm(driver, "admin@email.com", "admin");
+			PO_LoginView.fillForm(driver, "clara@email.com", "123456");
 			
 			List<WebElement> elementos = PO_View.checkElement(driver, "id", "users-menu");
 			elementos.get(0).click();
@@ -156,7 +147,12 @@ public class TestsJesus {
 				
 			} while (isNextPage); // nextPageOfList
 
-			int numberUsers = DataBaseAccess.listUsers().stream().filter( u -> u.getRole().equals( "ROLE_USER" ) ).toArray().length;
+			int numberUsers = DataBaseAccess.listUsers()
+									.stream()
+									.filter( u -> u.getRole().equals( "ROLE_USER" ) )
+									.filter( u -> !u.getEmail().equals("clara@email.com") )
+									.toArray()
+									.length;
 			Assertions.assertEquals(numberUsers, usersCount);
 		}
 		
@@ -164,7 +160,7 @@ public class TestsJesus {
 		@Test
 		public void Prueba12() {
 			PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
-			PO_LoginView.fillForm(driver, "admin@email.com", "admin");
+			PO_LoginView.fillForm(driver, "clara@email.com", "123456");
 			
 			List<WebElement> elementos = PO_View.checkElement(driver, "id", "users-menu");
 			elementos.get(0).click();
@@ -193,7 +189,12 @@ public class TestsJesus {
 				
 			} while (isNextPage); // nextPageOfList
 
-			int numberUsers = DataBaseAccess.listUsers().stream().filter( u -> u.getRole().equals( "ROLE_USER" ) ).toArray().length;
+			int numberUsers = DataBaseAccess.listUsers()
+								.stream()
+								.filter( u -> u.getRole().equals( "ROLE_USER" ) )
+								.filter( u -> !u.getEmail().equals("clara@email.com") )
+								.toArray()
+								.length;
 			Assertions.assertEquals(numberUsers, usersCount);
 		}
 		

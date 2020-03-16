@@ -1,6 +1,5 @@
 package com.uniovi.controllers;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.uniovi.entities.Post;
 import com.uniovi.entities.User;
 import com.uniovi.services.FriendshipService;
 import com.uniovi.services.PostsService;
