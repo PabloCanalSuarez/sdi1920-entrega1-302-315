@@ -6,7 +6,7 @@
 				<th th:text="#{userName.message}">Nombre</th>
 				<th th:text="#{userSurname.message}">Apellidos</th>
 				<th class="col-md-1"></th>
-				<th class="col-md-1" sec:authorize="hasRole('ROLE_ADMIN')">Borrar</th>
+				<th class="col-md-1" sec:authorize="hasRole('ROLE_ADMIN')" th:text="#{userDelete.message}">Borrar</th>
 			</tr>
 		</thead>
 		<tbody>

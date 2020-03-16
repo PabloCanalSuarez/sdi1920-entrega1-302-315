@@ -18,10 +18,10 @@
 				</a>
 					<ul class="dropdown-menu">
 						<li><a href="/user/list" th:text="#{verUsuarios.message}">Ver Usuarios</a></li>
-						<li><a href="/user/friends" th:text="#{verAmigos.message}">Ver Amigos</a></li>
+						<li sec:authorize="hasAnyRole('ROLE_USER')"><a href="/user/friends" th:text="#{verAmigos.message}">Ver Amigos</a></li>
 					</ul></li>
 					
-				<li><a href="/invitation/list" th:text="#{invitationList.message}">Ver Invitaciones</a></li>
+				<li><a href="/invitation/list" sec:authorize="hasAnyRole('ROLE_USER')" th:text="#{invitationList.message}">Ver Invitaciones</a></li>
 				
 				<li id="posts-menu" class="dropdown" sec:authorize="hasAnyRole('ROLE_USER')"><a
 					class="dropdown-toggle" data-toggle="dropdown" href="#"
