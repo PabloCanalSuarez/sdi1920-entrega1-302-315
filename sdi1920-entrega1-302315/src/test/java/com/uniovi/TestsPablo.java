@@ -19,10 +19,14 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.uniovi.repositories.UsersRepository;
+import com.uniovi.tests.pageobjects.PO_AddPostView;
+import com.uniovi.tests.pageobjects.PO_FriendsUser;
 import com.uniovi.tests.pageobjects.PO_HomeView;
+import com.uniovi.tests.pageobjects.PO_ListUserView;
 import com.uniovi.tests.pageobjects.PO_LoginView;
 import com.uniovi.tests.pageobjects.PO_NavView;
 import com.uniovi.tests.pageobjects.PO_PostView;
+import com.uniovi.tests.pageobjects.PO_Properties;
 import com.uniovi.tests.pageobjects.PO_View;
 import com.uniovi.tests.util.DataBaseAccess;
 import com.uniovi.tests.util.SeleniumUtils;
@@ -169,7 +173,7 @@ public class TestsPablo {
 		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
 		PO_LoginView.fillForm(driver, "diego@email.com", "123456");
 		
-		PO_View.checkElement(driver, "text", "petición enviada");
+		SeleniumUtils.textoPresentePagina(driver, "no puedes enviar otra petición");
 	}
 	
 	// Mostrar el listado de invitaciones de amistad recibidas. 
@@ -208,9 +212,39 @@ public class TestsPablo {
 	// de las etiquetas cambian al idioma correspondiente). Ejemplo, Página
 	// principal/Opciones Principales de
 	// Usuario/Listado de Usuarios.
-	@Test
+	@Test  
 	public void Prueba20() {
-
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		PO_LoginView.fillForm(driver, "clara@email.com", "123456");
+		
+		// Check en /home
+		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//*[@id=\"myNavbar\"]/ul[1]/li[1]/a");
+		elementos.get(0).click();
+		PO_HomeView.checkChangeIdiom(driver, "btnSpanish", "btnEnglish", PO_Properties.getSPANISH(), PO_Properties.getENGLISH());
+		
+		// Check en /user/list
+		elementos = PO_View.checkElement(driver, "id", "users-menu");
+		elementos.get(0).click();
+		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href,'user/list')]");
+		elementos.get(0).click();
+		
+		PO_ListUserView.checkChangeIdiom(driver, "btnSpanish", "btnEnglish", PO_Properties.getSPANISH(), PO_Properties.getENGLISH());
+		
+		// Check en /user/friends
+		elementos = PO_View.checkElement(driver, "id", "users-menu");
+		elementos.get(0).click();
+		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href,'user/friends')]");
+		elementos.get(0).click();
+		
+		PO_FriendsUser.checkChangeIdiom(driver, "btnSpanish", "btnEnglish", PO_Properties.getSPANISH(), PO_Properties.getENGLISH());
+		
+		// Check en /post/add
+		elementos = PO_View.checkElement(driver, "id", "posts-menu");
+		elementos.get(0).click();
+		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href,'post/add')]");
+		elementos.get(0).click();
+		
+		PO_AddPostView.checkChangeIdiom(driver, "btnSpanish", "btnEnglish", PO_Properties.getSPANISH(), PO_Properties.getENGLISH());
 	}
 
 	// Ir al formulario crear publicaciones, rellenarla con datos válidos y pulsar
