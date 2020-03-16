@@ -1,7 +1,5 @@
 package com.uniovi;
 
-import static org.junit.Assert.fail;
-
 import java.util.List;
 
 import org.junit.After;
@@ -17,9 +15,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import com.uniovi.repositories.UsersRepository;
 import com.uniovi.tests.pageobjects.PO_AddPostView;
 import com.uniovi.tests.pageobjects.PO_HomeView;
 import com.uniovi.tests.pageobjects.PO_LoginView;
@@ -27,7 +23,6 @@ import com.uniovi.tests.pageobjects.PO_Properties;
 import com.uniovi.tests.pageobjects.PO_RegisterView;
 import com.uniovi.tests.pageobjects.PO_View;
 import com.uniovi.tests.util.DataBaseAccess;
-import com.uniovi.tests.util.SeleniumUtils;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestsJesus {
@@ -41,9 +36,6 @@ public class TestsJesus {
 		
 		static WebDriver driver = getDriver(PathFirefox65, Geckdriver024);
 		static String URL = "http://localhost:8080";
-		
-		@Autowired
-		private UsersRepository usersRepository;
 
 		public static WebDriver getDriver(String PathFirefox, String Geckdriver) {
 			System.setProperty("webdriver.firefox.bin", PathFirefox);
