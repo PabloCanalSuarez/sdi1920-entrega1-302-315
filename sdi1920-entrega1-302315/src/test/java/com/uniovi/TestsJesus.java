@@ -84,8 +84,7 @@ public class TestsJesus {
 			PO_RegisterView.fillForm(driver, "myEmail@dir.com", "Josefo", "Perez", "1234", "1234");
 			
 			// We are in the correct view
-			PO_View.checkElement(driver, "text", "Esta es una zona privada la web");
-			System.err.println("TODO: Change element checked for test to pass");
+			PO_View.checkElement(driver, "id", "titleHome");
 			
 			// Delete registration
 			DataBaseAccess.removeUser("myEmail@dir.com");
@@ -131,7 +130,7 @@ public class TestsJesus {
 		public void Prueba11() {
 			
 			PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
-			PO_LoginView.fillForm(driver, "admin@email.com", "admin");
+			PO_LoginView.fillForm(driver, "clara@email.com", "123456");
 			
 			List<WebElement> elementos = PO_View.checkElement(driver, "id", "users-menu");
 			elementos.get(0).click();
@@ -156,7 +155,12 @@ public class TestsJesus {
 				
 			} while (isNextPage); // nextPageOfList
 
-			int numberUsers = DataBaseAccess.listUsers().stream().filter( u -> u.getRole().equals( "ROLE_USER" ) ).toArray().length;
+			int numberUsers = DataBaseAccess.listUsers()
+									.stream()
+									.filter( u -> u.getRole().equals( "ROLE_USER" ) )
+									.filter( u -> !u.getEmail().equals("clara@email.com") )
+									.toArray()
+									.length;
 			Assertions.assertEquals(numberUsers, usersCount);
 		}
 		
@@ -164,7 +168,7 @@ public class TestsJesus {
 		@Test
 		public void Prueba12() {
 			PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
-			PO_LoginView.fillForm(driver, "admin@email.com", "admin");
+			PO_LoginView.fillForm(driver, "clara@email.com", "123456");
 			
 			List<WebElement> elementos = PO_View.checkElement(driver, "id", "users-menu");
 			elementos.get(0).click();
@@ -193,7 +197,12 @@ public class TestsJesus {
 				
 			} while (isNextPage); // nextPageOfList
 
-			int numberUsers = DataBaseAccess.listUsers().stream().filter( u -> u.getRole().equals( "ROLE_USER" ) ).toArray().length;
+			int numberUsers = DataBaseAccess.listUsers()
+								.stream()
+								.filter( u -> u.getRole().equals( "ROLE_USER" ) )
+								.filter( u -> !u.getEmail().equals("clara@email.com") )
+								.toArray()
+								.length;
 			Assertions.assertEquals(numberUsers, usersCount);
 		}
 		
