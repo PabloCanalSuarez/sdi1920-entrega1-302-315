@@ -17,6 +17,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+import com.uniovi.tests.pageobjects.PO_AddPostView;
+import com.uniovi.tests.pageobjects.PO_FriendsUser;
 import com.uniovi.tests.pageobjects.PO_HomeView;
 import com.uniovi.tests.pageobjects.PO_ListUserView;
 import com.uniovi.tests.pageobjects.PO_LoginView;
