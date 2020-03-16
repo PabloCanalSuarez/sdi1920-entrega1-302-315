@@ -1,5 +1,8 @@
 package com.uniovi.controllers;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.uniovi.entities.Post;
 import com.uniovi.entities.User;
 import com.uniovi.services.FriendshipService;
+import com.uniovi.services.PostsService;
 import com.uniovi.services.RolesService;
 import com.uniovi.services.SecurityService;
 import com.uniovi.services.UsersService;
@@ -24,6 +29,9 @@ import com.uniovi.validators.SignUpFormValidator;
 public class UsersController {
 	@Autowired
 	private UsersService usersService;
+	
+	@Autowired
+	private PostsService postsService;
 
 	@Autowired
 	private SecurityService securityService;
@@ -99,5 +107,22 @@ public class UsersController {
 		usersService.addUser(user);
 		securityService.autoLogin(user.getEmail(), user.getPasswordConfirm());
 		return "redirect:home";
+	}
+	
+	@RequestMapping(value = "/user/delete", method = RequestMethod.POST)
+	public String getListado(Model model, @RequestParam Map<String,String> requestParams) {
+		for (String s : requestParams.keySet()) {
+			try {
+				Long id = Long.decode(s);
+				
+				postsService.getPostsByUserId(id).forEach( p -> postsService.deletePost(p.getId()) );
+				friendshipService.deleteAllInfoOfUser(id);
+				usersService.deleteUser(id);
+			} catch(NumberFormatException e) {
+				// Wrong param
+			}
+		}
+		
+		return "redirect:/user/list";
 	}
 }

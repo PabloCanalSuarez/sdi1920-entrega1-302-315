@@ -68,4 +68,8 @@ public class FriendshipService {
 	public List<Friendship> searchFriendsOfUser(Long id) {
 		return friendshipRepository.searchFriendsOfUser(id);
 	}
+
+	public void deleteAllInfoOfUser(Long id) {
+		friendshipRepository.deleteAllInfoOfUser(id);
+	}
 }

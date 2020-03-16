@@ -45,4 +45,9 @@ public interface FriendshipRepository extends CrudRepository<Friendship, Long>{
 
 	@Query("SELECT u FROM Friendship f, User u WHERE f.userFrom.id = ?1 AND f.userTo.id = u.id")
 	List<User> getUsersToByUserFrom(Long idUserFrom);
+	
+	@Modifying
+	@Transactional
+	@Query("DELETE FROM Friendship f WHERE f.userFrom.id = ?1 OR f.userTo.id = ?1")
+	void deleteAllInfoOfUser(Long id);
 }
