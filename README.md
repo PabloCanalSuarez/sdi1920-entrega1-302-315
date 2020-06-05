@@ -1,5 +1,3 @@
 # sdi1920-entrega1-302315
 
-## Developers
- - Pablo Cañal Suárez
- - Jesús Quesada Matilla
+Class task developed with [Jesús Quesada](https://github.com/jesQM) for SDI 2019-2020 course.
